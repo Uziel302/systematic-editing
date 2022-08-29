@@ -6,9 +6,9 @@
   </h2>
   <h3>As first step, we focus on fixing suspect typos in Wikipedia.</h3>
   
-  <button>click here to get the next suspect typo</button>
+  <button (click)="typosService.getTypos()">click here to get the next suspect typo</button>
 
-  <h1>{{suspectWord}}</h1>
+  <h1>{{stringi(typosService.suspectWord)}}</h1>
 
   <br>
   <a href="https://en.wikipedia.org/wiki/User_talk:Uziel302" target="_blank">My talk page in Wikipedia,</a> where I would be glad to get feedback.

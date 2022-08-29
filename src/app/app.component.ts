@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { TyposService } from './typos/typos.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,5 +9,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'systematic-editing';
-  public suspectWord = '';
+
+  constructor(
+    public typosService: TyposService,
+  ){}
+
+  stringi (s: any){
+    return JSON.stringify(s);
+  }
 }
