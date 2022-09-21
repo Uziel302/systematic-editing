@@ -23,10 +23,10 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/auth/mediawiki',
+app.get('/api/auth/mediawiki',
   passport.authenticate('mediawiki', { scope: 'session' }));
  
-app.get('/auth/mediawiki/callback', 
+app.get('/api/auth/mediawiki/callback', 
   passport.authenticate('mediawiki', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
@@ -39,6 +39,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 
 app.listen(3000,() => console.log('Server is running on port 3000'));
