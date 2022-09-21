@@ -10,7 +10,7 @@ const passport = require('passport');
 passport.use(new MediaWikiStrategy({
     consumerKey: process.env.consumerKey,
     consumerSecret: process.env.consumerSecret,
-    callbackURL: "localhost:3000"
+    callbackURL: "https://ctioc.org/api/auth/mediawiki/callback"
   },
   function(token, tokenSecret, profile, done) {
     User.findOrCreate({ mediawikiGlobalId: profile.id }, function (err, user) {
@@ -41,4 +41,4 @@ app.use(bodyParser.urlencoded({
 
 app.use('/api', indexRouter);
 
-app.listen(3000,() => console.log('Server is running on port 3000'));
+app.listen(4000,() => console.log('Server is running on port 4000'));
