@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiEndPoint: 'https://new.tardigradaschool.com/',
+  apiEndPoint: 'https://ctioc.org/',
 };

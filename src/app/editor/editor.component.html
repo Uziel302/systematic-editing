@@ -1,0 +1,14 @@
+<div id="container">
+  <h1>Welcome to systematic editing!</h1>
+  <h2>
+    Here is the place to edit texts in a systematic way,
+    <br>instead of ad hoc copy editing and styling.
+  </h2>
+  <h3>As first step, we focus on fixing suspect typos in Wikipedia.</h3>
+  
+  <button (click)="typosService.getTypos()">click here to get the next suspect typo</button>
+
+  <h1>{{stringi(typosService.suspectWord)}}</h1>
+
+  <br>
+</div>

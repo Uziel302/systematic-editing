@@ -1,0 +1,12 @@
+#header-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.login-button {
+  padding: 7.75px 7.5px;
+  margin: 6.75px 7.5px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
