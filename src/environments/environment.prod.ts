@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiEndPoint: 'https://ctioc.org/',
+  apiEndPoint: 'https://ctioc.org/api/',
 };
