@@ -55,7 +55,7 @@ app.get(
   function (req, res) {
     // Successful authentication, redirect home.
     //res.send('welcome! ' + JSON.stringify(req.user));
-    res.redirect(process.env.front + "success/" + req.user.displayName);
+    res.redirect((process.env.front??'') + "success/" + req.user.displayName);
   }
 );
 
