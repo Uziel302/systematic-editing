@@ -29,14 +29,32 @@ exports.up = function(db, callback) {
       type: 'string',
       length: 100
     },
-    raw: {
+    suspect: {
       type: 'string',
-      length: 1000
+      length: 100
     },
-    wordid: {
-      type: 'int',
-      defaultValue: 0
+    correction: {
+      type: 'string',
+      length: 100
     },
+    contextBefore: {
+      type: 'string',
+      length: 400
+    },
+    contextAfter: {
+      type: 'string',
+      length: 400
+    },
+    type: {
+      type: 'string',
+      length: 30
+    },
+    location: {
+      type: 'int'
+    },
+    shown: {
+      type: 'int'
+    }
   }, function(err) {
     if (err) return callback(err);
     return callback();
