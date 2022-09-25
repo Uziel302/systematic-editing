@@ -1,10 +1,15 @@
 <div id="header-container">
   <ng-container *ngIf="loginService.username">
     <div class="login-button" target="_blank" (click)="logout()">Logout</div>
-    Hello {{loginService.username}}!
+    Hello {{ loginService.username }}!
   </ng-container>
   <ng-container *ngIf="!loginService.username">
-    <a class="login-button" target="_blank" [attr.href]="environment.apiEndPoint + 'auth/mediawiki'">Login</a>
+    <a
+      class="login-button"
+      target="_blank"
+      [attr.href]="environment.apiEndPoint + 'auth/mediawiki'"
+      >Login</a
+    >
     <div id="login-note">to make edits</div>
   </ng-container>
 </div>

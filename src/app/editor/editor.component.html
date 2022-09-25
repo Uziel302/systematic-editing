@@ -1,7 +1,8 @@
 <div id="container">
   <h1>Correct a typo in one click</h1>
   <h2>
-    A new version of a Wikipedia project by the same name, aimed to correct typos in Wikipedia.
+    A new version of a Wikipedia project by the same name, aimed to correct
+    typos in Wikipedia.
   </h2>
 
   <button class="next-button" (click)="typosService.getTypos()">
@@ -13,8 +14,11 @@
       {{ typosService.suspectWord.suspect }} =>
       {{ typosService.suspectWord.correction }}
     </div>
-    <div class="title">found in: 
-      <a [attr.href]="linkify(typosService.suspectWord.title)">{{ typosService.suspectWord.title }}</a>
+    <div class="title">
+      found in:
+      <a [attr.href]="linkify(typosService.suspectWord.title)">{{
+        typosService.suspectWord.title
+      }}</a>
     </div>
     <div class="context-before">
       {{ typosService.suspectWord.contextBefore }}
@@ -24,8 +28,18 @@
       {{ typosService.suspectWord.contextAfter }}
     </div>
     <button class="replace-button" (click)="replace()">Replace</button>
-    <div class="edit-error">{{typosService.errorMessage}}</div>
-    <a class="edit-success" [attr.href]="'https://'+typosService.suspectWord.project+'.org/w/index.php?title='+typosService.suspectWord.title+'&diff=curr&oldid=prev'">{{typosService.successMessage}}</a>
+    <div class="edit-error">{{ typosService.errorMessage }}</div>
+    <a
+      class="edit-success"
+      [attr.href]="
+        'https://' +
+        typosService.suspectWord.project +
+        '.org/w/index.php?title=' +
+        typosService.suspectWord.title +
+        '&diff=curr&oldid=prev'
+      "
+      >{{ typosService.successMessage }}</a
+    >
   </div>
   <br />
 </div>

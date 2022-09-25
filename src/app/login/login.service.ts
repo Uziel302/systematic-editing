@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class LoginService {
   public username: string = '';
 
-  public autoAuthUser(){
+  public autoAuthUser() {
     this.username = localStorage.getItem('username') ?? '';
   }
 }

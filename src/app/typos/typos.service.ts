@@ -31,16 +31,16 @@ export class TyposService {
       );
   }
 
-  replaceTypo(){
+  replaceTypo() {
     this.http
-    .post(environment.apiEndPoint + 'replaceTypo', this.suspectWord)
-    .subscribe(
-      (data) => {
-        this.successMessage = 'Success! Click to view the edit';
-      },
-      (error) => {
-        this.errorMessage = JSON.stringify(error.error);
-      }
-    );
+      .post(environment.apiEndPoint + 'replaceTypo', this.suspectWord)
+      .subscribe(
+        (data) => {
+          this.successMessage = 'Success! Click to view the edit';
+        },
+        (error) => {
+          this.errorMessage = JSON.stringify(error.error);
+        }
+      );
   }
 }
