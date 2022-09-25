@@ -27,7 +27,7 @@
     </div>
     <button class="replace-button" (click)="replace()">Replace</button>
     <div class="edit-error">{{typosService.errorMessage}}</div>
-    <div class="edit-success">{{typosService.successMessage}}</div>
+    <a class="edit-success" [attr.href]="'https://'+typosService.suspectWord.project+'.org/w/index.php?title='+typosService.suspectWord.title+'&diff=curr&oldid=prev'">{{typosService.successMessage}}</a>
   </div>
   <br />
 </div>

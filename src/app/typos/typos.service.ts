@@ -36,7 +36,7 @@ export class TyposService {
     .post(environment.apiEndPoint + 'replaceTypo', this.suspectWord)
     .subscribe(
       (data) => {
-        this.successMessage = JSON.stringify(data);
+        this.successMessage = 'Success! Click to view the edit';
       },
       (error) => {
         this.errorMessage = JSON.stringify(error.error);

@@ -50,7 +50,7 @@ exports.replaceTypo = async (req, res) => {
     format: "json",
     formatversion: 2,
     minor: 1,
-    title: "User:Uziel302", //req.body.title,
+    title: req.body.title,
     summary:
       req.body.suspect +
       "->" +
@@ -61,9 +61,9 @@ exports.replaceTypo = async (req, res) => {
     watchlist: "nochange",
   };
   let result = await this.edit(req, session, params);
-  if (result.success) {
+  if (result.edit.result === "Success") {
     res.status(200).json({
-      suspect,
+      result,
     });
   }
 };
@@ -72,7 +72,9 @@ exports.getViews = async (req, res) => {
   const options = {
     methode: "GET",
     uri:
-      "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/" +
+      "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/" +
+      req.body.project +
+      "/all-access/user/" +
       req.body.title +
       "/daily/2022082700/2022082800",
     json: true,

@@ -4,22 +4,23 @@ import { TyposService } from '../typos/typos.service';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit {
+  constructor(public typosService: TyposService) {}
 
-  constructor(
-    public typosService: TyposService,
-  ) { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  linkify(title: string) {
+    return (
+      'https://' +
+      this.typosService.suspectWord.project +
+      '.org/wiki/' +
+      title.replace(/ /g, '_')
+    );
   }
 
-  linkify(title: string){
-    return "https://en.wikipedia.org/wiki/" + title.replace(/ /g, '_')
-  }
-
-  replace(){
+  replace() {
     this.typosService.replaceTypo();
   }
 }
