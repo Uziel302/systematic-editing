@@ -1,7 +1,7 @@
 const knex = require("../dbConnection");
 const tableName = "suspects";
 const rp = require("request-promise");
-const mwApiToken = require("../mwApiToken");
+const oauthFetchJson = require('oauth-fetch-json');
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
@@ -25,31 +25,32 @@ exports.replaceTypo = async (req, res) => {
 	if(newArticleText===articleText){
     res.status(400).send('Could not find suspect word in article'); 
   }
-  const params = {
-    action: "edit",
-    minor: 1,
-    title: req.body.title,
-    summary:
-      req.body.suspect +
-      "->" +
-      req.body.correction +
-      " - [[Wikipedia:Correct typos in one click|Correct typos in one click]]",
-    text: newArticleText,
-    watchlist: "nochange",
-  };
 
   let session = {};
   let sessions = req.sessionStore.sessions;
 
   for(let oneSession in sessions){
     if(JSON.parse(sessions[oneSession]).passport.user){
-      session.oauth = JSON.parse(sessions[oneSession]).passport.user.oauth;
+      session = JSON.parse(sessions[oneSession]).passport.user.oauth;
     }
   }
-  mwApiToken( 'csrf', 'en', params, 'wikipedia', { method: 'POST' }, session )
-  .then( function ( data ) {
-    console.log(data);
-  });
+  const token = (await this.getCSRF(session)).query.tokens.csrftoken;
+  const params = {
+    action: "edit",
+    format: "json",
+    formatversion: 2,
+    minor: 1,
+    title: 'User:Uziel302',//req.body.title,
+    summary:
+      req.body.suspect +
+      "->" +
+      req.body.correction +
+      " - [[Wikipedia:Correct typos in one click|Correct typos in one click]]",
+    text: newArticleText,
+    token,
+    watchlist: "nochange",
+  };
+  let result = await this.edit(session, params);
 };
 
 exports.getViews = async (req, res) => {
@@ -95,4 +96,22 @@ exports.getArticleText = async (req, res) => {
 
 exports.escapeRegex = (str) => {
   return str.replace( /([\\{}()|.?*+\-^$\[\]])/g, '\\$1' );
+}
+
+exports.getCSRF = async (session)=>{
+  const url = 'https://test.wikipedia.org/w/api.php';
+  const params = {
+    action: "query",
+    format: "json",
+    formatversion: 2,
+    meta: "tokens",
+    type: "csrf",
+  };
+
+  return oauthFetchJson( url, params, null, session );
+}
+
+exports.edit = async (session, params)=>{
+  const url = 'https://test.wikipedia.org/w/api.php';
+  return oauthFetchJson( url, params, { method: 'POST' }, session );
 }
