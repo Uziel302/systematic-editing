@@ -4,9 +4,15 @@
   align-items: center;
 }
 
+#right-header,
 #left-header {
   display: flex;
   align-items: center;
+}
+
+#arrow {
+  height: 30px;
+  padding: 20px;
 }
 
 .login-button {
