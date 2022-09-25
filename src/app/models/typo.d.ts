@@ -4,4 +4,5 @@ export interface ITypo {
   title: string;
   contextBefore: string;
   contextAfter: string;
+  project: string;
 }

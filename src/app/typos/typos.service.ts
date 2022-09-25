@@ -13,7 +13,10 @@ export class TyposService {
     title: '',
     contextBefore: '',
     contextAfter: '',
+    project: '',
   };
+  public successMessage: string = '';
+  public errorMessage: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -33,8 +36,11 @@ export class TyposService {
     .post(environment.apiEndPoint + 'replaceTypo', this.suspectWord)
     .subscribe(
       (data) => {
+        this.successMessage = JSON.stringify(data);
       },
-      (error) => {}
+      (error) => {
+        this.errorMessage = JSON.stringify(error.error);
+      }
     );
   }
 }

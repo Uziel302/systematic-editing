@@ -21,7 +21,7 @@ exports.replaceTypo = async (req, res) => {
     req.body.correction
   );
   if (newcontext === oldcontext) {
-    res.status(400).send("word not found in context line");
+    return res.status(400).send("word not found in context line");
   }
   const startBreak = req.body.contextBefore.match(/^[a-z]/i) ? "\\b" : "";
   const newArticleText = articleText.replace(
@@ -29,7 +29,7 @@ exports.replaceTypo = async (req, res) => {
     newcontext
   );
   if (newArticleText === articleText) {
-    res.status(400).send("Could not find suspect word in article");
+    return res.status(400).send("Could not find suspect word in article");
   }
 
   let session = {};
@@ -40,7 +40,11 @@ exports.replaceTypo = async (req, res) => {
       session = JSON.parse(sessions[oneSession]).passport.user.oauth;
     }
   }
-  const token = (await this.getCSRF(session)).query.tokens.csrftoken;
+  let token = await this.getCSRF(req, session);
+  if (!token.query) {
+    return res.status(400).send("failed getting token, please login again");
+  }
+  token = token.query.tokens.csrftoken;
   const params = {
     action: "edit",
     format: "json",
@@ -56,7 +60,12 @@ exports.replaceTypo = async (req, res) => {
     token,
     watchlist: "nochange",
   };
-  let result = await this.edit(session, params);
+  let result = await this.edit(req, session, params);
+  if (result.success) {
+    res.status(200).json({
+      suspect,
+    });
+  }
 };
 
 exports.getViews = async (req, res) => {
@@ -87,7 +96,9 @@ exports.getArticleText = async (req, res) => {
   const options = {
     methode: "GET",
     uri:
-      "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&titles=" +
+      "https://" +
+      req.body.project +
+      ".org/w/api.php?action=query&prop=revisions&titles=" +
       req.body.title +
       "&rvslots=*&rvprop=content&formatversion=2&format=json",
   };
@@ -106,8 +117,8 @@ exports.escapeRegex = (str) => {
   return str.replace(/([\\{}()|.?*+\-^$\[\]])/g, "\\$1");
 };
 
-exports.getCSRF = async (session) => {
-  const url = "https://test.wikipedia.org/w/api.php";
+exports.getCSRF = async (req, session) => {
+  const url = "https://" + req.body.project + ".org/w/api.php";
   const params = {
     action: "query",
     format: "json",
@@ -119,7 +130,7 @@ exports.getCSRF = async (session) => {
   return oauthFetchJson(url, params, null, session);
 };
 
-exports.edit = async (session, params) => {
-  const url = "https://test.wikipedia.org/w/api.php";
+exports.edit = async (req, session, params) => {
+  const url = "https://" + req.body.project + ".org/w/api.php";
   return oauthFetchJson(url, params, { method: "POST" }, session);
 };
