@@ -1,13 +1,11 @@
 <div id="container">
-  <h1>Welcome to systematic editing!</h1>
+  <h1>Correct a typo in one click</h1>
   <h2>
-    Here is the place to edit texts in a systematic way,
-    <br />instead of ad hoc copy editing and styling.
+    A new version of a Wikipedia project by the same name, aimed to correct typos in Wikipedia.
   </h2>
-  <h3>As first step, we focus on fixing suspect typos in Wikipedia.</h3>
 
-  <button (click)="typosService.getTypos()">
-    click here to get the next suspect typo
+  <button class="next-button" (click)="typosService.getTypos()">
+    Get the next suspect typo
   </button>
 
   <div class="typo-container" *ngIf="typosService.suspectWord.suspect">

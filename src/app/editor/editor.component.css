@@ -14,3 +14,8 @@
 .replacement {
   font-size: 35px;
 }
+
+.next-button {
+  font-size: 35px;
+  border-radius: 10px;
+}
