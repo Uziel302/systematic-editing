@@ -15,7 +15,11 @@ export class EditorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  stringi (s: any){
-    return JSON.stringify(s);
+  linkify(title: string){
+    return "https://en.wikipedia.org/wiki/" + title.replace(/ /g, '_')
+  }
+
+  replace(){
+    this.typosService.replaceTypo();
   }
 }

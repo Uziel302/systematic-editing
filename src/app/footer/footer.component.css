@@ -1,4 +1,5 @@
 #container {
-  display: flex;
-  justify-content: center;
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
 }

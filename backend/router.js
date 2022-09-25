@@ -1,6 +1,12 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getTypos } = require('./controllers/typos.controller');
+const { getTypos, replaceTypo } = require("./controllers/typos.controller");
 
-router.get('/wikitypos', (req, res) => { return getTypos(req, res); });
+router.get("/typos", (req, res) => {
+  return getTypos(req, res);
+});
+router.post("/replaceTypo", 
+(req, res) => {
+  return replaceTypo(req, res);
+});
 module.exports = router;

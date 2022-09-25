@@ -5,3 +5,12 @@
   flex-direction: column;
   text-align: center;
 }
+
+.typo-container {
+  text-align: left;
+  font-size: 25px;
+}
+
+.replacement {
+  font-size: 35px;
+}

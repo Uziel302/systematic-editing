@@ -2,13 +2,30 @@
   <h1>Welcome to systematic editing!</h1>
   <h2>
     Here is the place to edit texts in a systematic way,
-    <br>instead of ad hoc copy editing and styling.
+    <br />instead of ad hoc copy editing and styling.
   </h2>
   <h3>As first step, we focus on fixing suspect typos in Wikipedia.</h3>
-  
-  <button (click)="typosService.getTypos()">click here to get the next suspect typo</button>
 
-  <h1>{{stringi(typosService.suspectWord)}}</h1>
+  <button (click)="typosService.getTypos()">
+    click here to get the next suspect typo
+  </button>
 
-  <br>
+  <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
+    <div class="replacement">
+      {{ typosService.suspectWord.suspect }} =>
+      {{ typosService.suspectWord.correction }}
+    </div>
+    <div class="title">found in: 
+      <a [attr.href]="linkify(typosService.suspectWord.title)">{{ typosService.suspectWord.title }}</a>
+    </div>
+    <div class="context-before">
+      {{ typosService.suspectWord.contextBefore }}
+    </div>
+    <div class="context-after">
+      <b>{{ typosService.suspectWord.suspect }}</b>
+      {{ typosService.suspectWord.contextAfter }}
+    </div>
+    <button class="replace-button" (click)="replace()">Replace</button>
+  </div>
+  <br />
 </div>
