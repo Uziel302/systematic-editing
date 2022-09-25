@@ -1,7 +1,7 @@
 const knex = require("../dbConnection");
 const tableName = "suspects";
 const rp = require("request-promise");
-const oauthFetchJson = require('oauth-fetch-json');
+const oauthFetchJson = require("oauth-fetch-json");
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
@@ -16,21 +16,27 @@ exports.getTypos = async (req, res) => {
 exports.replaceTypo = async (req, res) => {
   let articleText = await this.getArticleText(req, res);
   let oldcontext = req.body.contextBefore;
-  let newcontext = oldcontext.replace(new RegExp(this.escapeRegex(req.body.suspect) + "$"), req.body.correction);
-  if(newcontext===oldcontext){
-    res.status(400).send('word not found in context line');
+  let newcontext = oldcontext.replace(
+    new RegExp(this.escapeRegex(req.body.suspect) + "$"),
+    req.body.correction
+  );
+  if (newcontext === oldcontext) {
+    res.status(400).send("word not found in context line");
   }
   const startBreak = req.body.contextBefore.match(/^[a-z]/i) ? "\\b" : "";
-	const newArticleText = articleText.replace(new RegExp(startBreak + this.escapeRegex(req.body.contextBefore) + "\\b"), newcontext);
-	if(newArticleText===articleText){
-    res.status(400).send('Could not find suspect word in article'); 
+  const newArticleText = articleText.replace(
+    new RegExp(startBreak + this.escapeRegex(req.body.contextBefore) + "\\b"),
+    newcontext
+  );
+  if (newArticleText === articleText) {
+    res.status(400).send("Could not find suspect word in article");
   }
 
   let session = {};
   let sessions = req.sessionStore.sessions;
 
-  for(let oneSession in sessions){
-    if(JSON.parse(sessions[oneSession]).passport.user){
+  for (let oneSession in sessions) {
+    if (JSON.parse(sessions[oneSession]).passport.user) {
       session = JSON.parse(sessions[oneSession]).passport.user.oauth;
     }
   }
@@ -40,7 +46,7 @@ exports.replaceTypo = async (req, res) => {
     format: "json",
     formatversion: 2,
     minor: 1,
-    title: 'User:Uziel302',//req.body.title,
+    title: "User:Uziel302", //req.body.title,
     summary:
       req.body.suspect +
       "->" +
@@ -81,25 +87,27 @@ exports.getArticleText = async (req, res) => {
   const options = {
     methode: "GET",
     uri:
-      "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&titles="+req.body.title+"&rvslots=*&rvprop=content&formatversion=2&format=json",
+      "https://en.wikipedia.org/w/api.php?action=query&prop=revisions&titles=" +
+      req.body.title +
+      "&rvslots=*&rvprop=content&formatversion=2&format=json",
   };
 
-  return rp(options)
-    .then(data=>{
-      if(!JSON.parse(data).query.pages[0].revisions[0].slots.main.content){
-        return res.status(400).send('could not get article');
-      } else {
-        return req.body.articleText = JSON.parse(data).query.pages[0].revisions[0].slots.main.content;
-      }
-    });
-}
+  return rp(options).then((data) => {
+    if (!JSON.parse(data).query.pages[0].revisions[0].slots.main.content) {
+      return res.status(400).send("could not get article");
+    } else {
+      return (req.body.articleText =
+        JSON.parse(data).query.pages[0].revisions[0].slots.main.content);
+    }
+  });
+};
 
 exports.escapeRegex = (str) => {
-  return str.replace( /([\\{}()|.?*+\-^$\[\]])/g, '\\$1' );
-}
+  return str.replace(/([\\{}()|.?*+\-^$\[\]])/g, "\\$1");
+};
 
-exports.getCSRF = async (session)=>{
-  const url = 'https://test.wikipedia.org/w/api.php';
+exports.getCSRF = async (session) => {
+  const url = "https://test.wikipedia.org/w/api.php";
   const params = {
     action: "query",
     format: "json",
@@ -108,10 +116,10 @@ exports.getCSRF = async (session)=>{
     type: "csrf",
   };
 
-  return oauthFetchJson( url, params, null, session );
-}
+  return oauthFetchJson(url, params, null, session);
+};
 
-exports.edit = async (session, params)=>{
-  const url = 'https://test.wikipedia.org/w/api.php';
-  return oauthFetchJson( url, params, { method: 'POST' }, session );
-}
+exports.edit = async (session, params) => {
+  const url = "https://test.wikipedia.org/w/api.php";
+  return oauthFetchJson(url, params, { method: "POST" }, session);
+};

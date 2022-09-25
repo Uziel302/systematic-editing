@@ -36,8 +36,7 @@ const { getTypos, replaceTypo } = require("./controllers/typos.controller");
 router.get("/typos", (req, res) => {
   return getTypos(req, res);
 });
-router.post("/replaceTypo", 
-(req, res) => {
+router.post("/replaceTypo", (req, res) => {
   return replaceTypo(req, res);
 });
 
@@ -51,7 +50,7 @@ router.get(
   passport.authenticate("mediawiki", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect((process.env.front??'') + "success/" + req.user.displayName);
+    res.redirect((process.env.front ?? "") + "success/" + req.user.displayName);
   }
 );
 module.exports = router;
