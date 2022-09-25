@@ -8,6 +8,7 @@ import { ITypo } from '../models/typo';
 @Injectable({ providedIn: 'root' })
 export class TyposService {
   public suspectWord: ITypo = {
+    id: 0,
     suspect: '',
     correction: '',
     title: '',

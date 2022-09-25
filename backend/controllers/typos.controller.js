@@ -5,6 +5,7 @@ const oauthFetchJson = require("oauth-fetch-json");
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
+  .whereNull('status')
     .first()
     .then((suspect) => {
       res.status(200).json({
@@ -34,10 +35,13 @@ exports.replaceTypo = async (req, res) => {
 
   let session = {};
   let sessions = req.sessionStore.sessions;
+  let username = '';
 
   for (let oneSession in sessions) {
-    if (JSON.parse(sessions[oneSession]).passport.user) {
-      session = JSON.parse(sessions[oneSession]).passport.user.oauth;
+    let user = JSON.parse(sessions[oneSession])?.passport?.user;
+    if (user) {
+      session = user.oauth;
+      username = user.displayName;
     }
   }
   let token = await this.getCSRF(req, session);
@@ -64,6 +68,13 @@ exports.replaceTypo = async (req, res) => {
   if (result.edit.result === "Success") {
     res.status(200).json({
       result,
+    });
+    knex(tableName)
+    .update({status: 1, fixer: username})
+    .where({ id: req.body.id })
+    .then((u) => {})
+    .catch((e) => {
+      let g  = e;
     });
   }
 };

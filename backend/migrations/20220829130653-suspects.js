@@ -54,8 +54,12 @@ exports.up = function (db, callback) {
       location: {
         type: "int",
       },
-      shown: {
+      status: {
         type: "int",
+      },
+      fixer: {
+        type: "string",
+        length: 30,
       },
     },
     function (err) {
