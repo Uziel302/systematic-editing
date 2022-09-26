@@ -2,15 +2,14 @@ const knex = require("../dbConnection");
 const tableName = "suspects";
 const rp = require("request-promise");
 const oauthFetchJson = require("oauth-fetch-json");
+const FIXED_STATUS = 1;
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
-  .whereNull('status')
-    .first()
-    .then((suspect) => {
-      res.status(200).json({
-        suspect,
-      });
+    .where("status", 0)
+    .limit(10)
+    .then((data) => {
+      res.status(200).json(data);
     });
 };
 
@@ -33,16 +32,9 @@ exports.replaceTypo = async (req, res) => {
     return res.status(400).send("Could not find suspect word in article");
   }
 
-  let session = {};
-  let sessions = req.sessionStore.sessions;
-  let username = '';
-
-  for (let oneSession in sessions) {
-    let user = JSON.parse(sessions[oneSession])?.passport?.user;
-    if (user) {
-      session = user.oauth;
-      username = user.displayName;
-    }
+  const session = this.getSession(req, res);
+  if(!session.displayName){
+    return;
   }
   let token = await this.getCSRF(req, session);
   if (!token.query) {
@@ -70,11 +62,26 @@ exports.replaceTypo = async (req, res) => {
       result,
     });
     knex(tableName)
-    .update({status: 1, fixer: username})
+      .update({ status: FIXED_STATUS, fixer: session.displayName })
+      .where({ id: req.body.id })
+      .then((u) => {})
+      .catch((e) => {});
+  }
+};
+
+exports.dismissTypo = async (req, res) => {
+  const session = this.getSession(req, res);
+  if(!session.displayName){
+    return;
+  }
+  res.status(200).json({
+    success: true,
+  });
+  knex(tableName)
+    .update({ status: req.body.status, fixer: session.displayName })
     .where({ id: req.body.id })
     .then((u) => {})
     .catch((e) => {});
-  }
 };
 
 exports.getViews = async (req, res) => {
@@ -144,4 +151,23 @@ exports.getCSRF = async (req, session) => {
 exports.edit = async (req, session, params) => {
   const url = "https://" + req.body.project + ".org/w/api.php";
   return oauthFetchJson(url, params, { method: "POST" }, session);
+};
+
+exports.getSession = (req, res) => {
+  let session = null;
+  let sessions = req.sessionStore.sessions;
+
+  for (let oneSession in sessions) {
+    let user = JSON.parse(sessions[oneSession])?.passport?.user;
+    if (user) {
+      session = user.oauth;
+      session.displayName = user.displayName;
+    }
+  }
+
+  if(!session){
+    return res.status(400).send("failed getting login session, try logging again");
+  }
+
+  return session;
 };

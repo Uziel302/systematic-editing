@@ -9,6 +9,7 @@ import { FooterComponent } from './footer/footer.component';
 import { EditorComponent } from './editor/editor.component';
 import { LoginSuccessComponent } from './login-success/login-success.component';
 import { AboutComponent } from './about/about.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { AboutComponent } from './about/about.component';
     LoginSuccessComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

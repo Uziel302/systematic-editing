@@ -7,6 +7,7 @@ import { ITypo } from '../models/typo';
 
 @Injectable({ providedIn: 'root' })
 export class TyposService {
+  public suspects: ITypo[] = [];
   public suspectWord: ITypo = {
     id: 0,
     suspect: '',
@@ -22,18 +23,17 @@ export class TyposService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getTypos(): void {
-    this.http
-      .get<{ suspect: any }>(environment.apiEndPoint + 'typos')
-      .subscribe(
-        (data) => {
-          if(Object.keys(data).length === 0){
-            this.errorMessage = "could not get new typos from server"
-          } else {
-            this.suspectWord = data.suspect;
-          }
-        },
-        (error) => {}
-      );
+    this.http.get<ITypo[]>(environment.apiEndPoint + 'typos').subscribe(
+      (data) => {
+        if (Object.keys(data).length === 0) {
+          this.errorMessage = 'could not get new typos from server';
+        } else {
+          this.suspects = data;
+          this.suspectWord = data[0];
+        }
+      },
+      (error) => {}
+    );
   }
 
   replaceTypo() {
@@ -43,6 +43,20 @@ export class TyposService {
         (data) => {
           this.successMessage = 'Success! Click to view the edit';
         },
+        (error) => {
+          this.errorMessage = JSON.stringify(error.error);
+        }
+      );
+  }
+
+  dismissTypo(status: number) {
+    this.http
+      .post(environment.apiEndPoint + 'dismissTypo', {
+        id: this.suspectWord.id,
+        status,
+      })
+      .subscribe(
+        (data) => {},
         (error) => {
           this.errorMessage = JSON.stringify(error.error);
         }

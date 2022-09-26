@@ -10,7 +10,7 @@
   <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
     <div class="replacement">
       {{ typosService.suspectWord.suspect }} =>
-      {{ typosService.suspectWord.correction }}
+      <input [(ngModel)]="typosService.suspectWord.correction"/>
     </div>
     <div class="title">
       found in:
@@ -25,7 +25,13 @@
       <b>{{ typosService.suspectWord.suspect }}</b>
       {{ typosService.suspectWord.contextAfter }}
     </div>
-    <button class="replace-button" (click)="replace()">Replace</button>
+    <div class="action-buttons">
+      <button class="action-button" (click)="replace()">Replace</button>
+      <button class="action-button" (click)="dismiss()">Dismiss</button>
+      <button class="action-button" (click)="skip()">Skip</button>
+      <button class="action-button" (click)="template()">Add typo template</button>
+    </div>
+    
     <div class="edit-error">{{ typosService.errorMessage }}</div>
     <a
       class="edit-success"

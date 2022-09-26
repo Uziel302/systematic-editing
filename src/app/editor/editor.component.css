@@ -12,6 +12,16 @@
   width: 70%;
 }
 
-.replacement {
+.replacement, .replacement input {
   font-size: 35px;
+  font-family: 'Arial';
+}
+
+.action-buttons {
+  display: flex;
+}
+
+.action-button {
+  margin: 10px 10px 10px 0;
+  font-size: 30px;
 }
