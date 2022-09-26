@@ -73,9 +73,7 @@ exports.replaceTypo = async (req, res) => {
     .update({status: 1, fixer: username})
     .where({ id: req.body.id })
     .then((u) => {})
-    .catch((e) => {
-      let g  = e;
-    });
+    .catch((e) => {});
   }
 };
 
