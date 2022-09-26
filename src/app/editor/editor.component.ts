@@ -9,7 +9,9 @@ import { TyposService } from '../typos/typos.service';
 export class EditorComponent implements OnInit {
   constructor(public typosService: TyposService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.typosService.getTypos();
+  }
 
   linkify(title: string) {
     return (

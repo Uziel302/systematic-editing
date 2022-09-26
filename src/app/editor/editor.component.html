@@ -5,9 +5,7 @@
     typos in Wikipedia.
   </h2>
 
-  <button class="next-button" (click)="typosService.getTypos()">
-    Get the next suspect typo
-  </button>
+  <div *ngIf="!typosService.suspectWord.suspect" class="edit-error">{{ typosService.errorMessage }}</div>
 
   <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
     <div class="replacement">

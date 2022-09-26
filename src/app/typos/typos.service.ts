@@ -26,7 +26,11 @@ export class TyposService {
       .get<{ suspect: any }>(environment.apiEndPoint + 'typos')
       .subscribe(
         (data) => {
-          this.suspectWord = data.suspect;
+          if(Object.keys(data).length === 0){
+            this.errorMessage = "could not get new typos from server"
+          } else {
+            this.suspectWord = data.suspect;
+          }
         },
         (error) => {}
       );
