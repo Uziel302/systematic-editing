@@ -23,10 +23,11 @@
       >
     </div>
     <div class="context-before">
-      context: {{ typosService.suspectWord.contextBefore }}
+      context: 
+      {{ typosService.suspectWord.contextBefore }}
     </div>
     <div class="context-after">
-      <b>{{ typosService.suspectWord.suspect }}</b>
+      <b style="font-weight:600">{{ typosService.suspectWord.suspect }}</b>
       {{ typosService.suspectWord.contextAfter }}
     </div>
     <div class="action-buttons narrow-none">

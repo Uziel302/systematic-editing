@@ -59,4 +59,8 @@
   .replacement input {
     font-size: 25px;
   }
+
+  .context-before, .context-after{
+    font-size: 20px;
+  }
 }
