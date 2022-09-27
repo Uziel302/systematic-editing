@@ -10,47 +10,52 @@
   </div>
 
   <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
-    <div class="replacement">
-      {{ typosService.suspectWord.suspect }} =>
-      <input [(ngModel)]="typosService.suspectWord.correction" />
+    <div id="text-part">
+      <div class="replacement">
+        {{ typosService.suspectWord.suspect }} =>
+        <input [(ngModel)]="typosService.suspectWord.correction" />
+      </div>
+      <div class="title">
+        found in:
+        <a
+          [attr.href]="linkify(typosService.suspectWord.title)"
+          target="_blank"
+          >{{ typosService.suspectWord.title }}</a
+        >
+      </div>
+      <div class="context-before">
+        context: 
+        {{ typosService.suspectWord.contextBefore }}
+      </div>
+      <div class="context-after">
+        <b style="font-weight:600">{{ typosService.suspectWord.suspect }}</b>
+        {{ typosService.suspectWord.contextAfter }}
+      </div>
     </div>
-    <div class="title">
-      found in:
-      <a
-        [attr.href]="linkify(typosService.suspectWord.title)"
-        target="_blank"
-        >{{ typosService.suspectWord.title }}</a
-      >
-    </div>
-    <div class="context-before">
-      context: 
-      {{ typosService.suspectWord.contextBefore }}
-    </div>
-    <div class="context-after">
-      <b style="font-weight:600">{{ typosService.suspectWord.suspect }}</b>
-      {{ typosService.suspectWord.contextAfter }}
-    </div>
-    <div class="action-buttons narrow-none">
-      <button class="action-button" (click)="replace()">Replace</button>
-      <button class="action-button" (click)="dismiss()">Dismiss</button>
-      <button class="action-button" (click)="skip()">Skip</button>
-      <button class="action-button action-template" (click)="template()">
-        Add typo template
-      </button>
+    
+    <div id="buttons-part">
+      <div class="action-buttons narrow-none">
+        <button class="action-button" (click)="replace()">Replace</button>
+        <button class="action-button" (click)="dismiss()">Dismiss</button>
+        <button class="action-button" (click)="skip()">Skip</button>
+        <button class="action-button action-template" (click)="template()">
+          Add typo template
+        </button>
+      </div>
+  
+      <div class="action-buttons wide-none">
+        <button class="action-button" (click)="skip()">Skip</button>
+        <button class="action-button action-template" (click)="template()">
+          Add typo template
+        </button>
+      </div>
+      <div class="action-buttons wide-none">
+        <button class="action-button" (click)="replace()">Replace</button>
+        <button class="action-button" (click)="dismiss()">Dismiss</button>
+      </div>
+      <div class="edit-error">{{ typosService.errorMessage }}</div>
     </div>
 
-    <div class="action-buttons wide-none">
-      <button class="action-button" (click)="skip()">Skip</button>
-      <button class="action-button action-template" (click)="template()">
-        Add typo template
-      </button>
-    </div>
-    <div class="action-buttons wide-none">
-      <button class="action-button" (click)="replace()">Replace</button>
-      <button class="action-button" (click)="dismiss()">Dismiss</button>
-    </div>
-
-    <div class="edit-error">{{ typosService.errorMessage }}</div>
   </div>
   <br />
   <div id="process-container">

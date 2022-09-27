@@ -1,9 +1,5 @@
 #container {
   font-family: "Open Sans";
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
 }
 
 .typo-container {
@@ -60,5 +56,9 @@
 
   h1 {
     font-size: 28px;
+  }
+
+  #text-part{
+    min-height: 400px;
   }
 }

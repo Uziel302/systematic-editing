@@ -3,38 +3,31 @@ const tableName = "suspects";
 const rp = require("request-promise");
 const oauthFetchJson = require("oauth-fetch-json");
 const FIXED_STATUS = 1;
+const NOT_FOUND_STATUS = 4;
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
     .where("status", 0)
-    .limit(10)
-    .then((data) => {
-      res.status(200).json(data);
+    .limit(3)
+    .then(async (data) => {
+      let filterData = [];
+      for(let datum of data){
+        let text = await this.getModifiedArticle(datum);
+        if(typeof text === 'string'){
+          filterData.push(datum);
+        } else {
+          knex(tableName)
+          .update({ status: NOT_FOUND_STATUS, fixer: 'system' })
+          .where({ id: datum.id })
+          .then((u) => {})
+          .catch((e) => {});
+        }
+      }
+      res.status(200).json(filterData);
     });
 };
 
 exports.replaceTypo = async (req, res) => {
-  let articleText = await this.getArticleText(req, res);
-  if (typeof articleText !== "string") {
-    return res.status(400).send("could not get article");
-  }
-  let oldcontext = req.body.contextBefore;
-  let newcontext = oldcontext.replace(
-    new RegExp(this.escapeRegex(req.body.suspect) + "$"),
-    req.body.correction
-  );
-  if (newcontext === oldcontext) {
-    return res.status(400).send("word not found in context line");
-  }
-  const startBreak = req.body.contextBefore.match(/^[a-z]/i) ? "\\b" : "";
-  const newArticleText = articleText.replace(
-    new RegExp(startBreak + this.escapeRegex(req.body.contextBefore) + "\\b"),
-    newcontext
-  );
-  if (newArticleText === articleText) {
-    return res.status(400).send("Could not find suspect word in article");
-  }
-
   const session = this.getSession(req, res);
   if (!session.displayName) {
     return;
@@ -44,6 +37,12 @@ exports.replaceTypo = async (req, res) => {
     return res.status(400).send("failed getting token, please login again");
   }
   token = token.query.tokens.csrftoken;
+
+  const text = await this.getModifiedArticle(req.body);
+  if(typeof text !== 'string'){
+    return res.status(400).send("failed finding typo in article");
+  }
+
   const params = {
     action: "edit",
     format: "json",
@@ -55,7 +54,7 @@ exports.replaceTypo = async (req, res) => {
       "->" +
       req.body.correction +
       " - [[Wikipedia:Correct typos in one click|Correct typos in one click]]",
-    text: newArticleText,
+    text,
     token,
     watchlist: "nochange",
   };
@@ -113,27 +112,27 @@ exports.getViews = async (req, res) => {
     });
 };
 
-exports.getArticleText = async (req, res) => {
+exports.getArticleText = async (typo) => {
   const options = {
     methode: "GET",
     uri:
       "https://" +
-      req.body.project +
+      typo.project +
       ".org/w/api.php?action=query&prop=revisions&titles=" +
-      encodeURI(req.body.title) +
+      encodeURI(typo.title) +
       "&rvslots=*&rvprop=content&formatversion=2&format=json",
   };
 
   return rp(options)
     .then((data) => {
       if (!JSON.parse(data).query.pages[0].revisions[0].slots.main.content) {
-        return res.status(400).send("could not get article");
+        return false;
       } else {
         return JSON.parse(data).query.pages[0].revisions[0].slots.main.content;
       }
     })
     .catch(function (err) {
-      return err;
+      return false;
     });
 };
 
@@ -179,3 +178,27 @@ exports.getSession = (req, res) => {
 
   return session;
 };
+
+exports.getModifiedArticle = async (typo)=>{
+  let articleText = await this.getArticleText(typo);
+  if (typeof articleText !== "string") {
+    return {error: "could not get article"};
+  }
+  let oldcontext = typo.contextBefore;
+  let newcontext = oldcontext.replace(
+    new RegExp(this.escapeRegex(typo.suspect) + "$"),
+    typo.correction
+  );
+  if (newcontext === oldcontext) {
+    return {error: "word not found in context line"};
+  }
+  const startBreak = typo.contextBefore.match(/^[a-z]/i) ? "\\b" : "";
+  const newArticleText = articleText.replace(
+    new RegExp(startBreak + this.escapeRegex(typo.contextBefore) + "\\b"),
+    newcontext
+  );
+  if (newArticleText === articleText) {
+    return {error: "Could not find suspect word in article"};
+  }
+  return newArticleText;
+}

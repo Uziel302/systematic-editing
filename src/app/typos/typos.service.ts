@@ -30,8 +30,10 @@ export class TyposService {
         if (Object.keys(data).length === 0) {
           this.errorMessage = 'could not get new typos from server';
         } else {
-          this.suspects = data;
-          this.suspectWord = data.shift() ?? this.emptySuspect;
+          this.suspects.push(...data);
+          if(!this.suspectWord.suspect){
+            this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
+          }
         }
       },
       (error) => {}
@@ -56,6 +58,7 @@ export class TyposService {
           for (let suspect of this.suspectsInProcess) {
             if (suspect.id === id) {
               suspect.response = error.error;
+              break;
             }
           }
         }
@@ -75,6 +78,7 @@ export class TyposService {
           for (let suspect of this.suspectsInProcess) {
             if (suspect.id === id) {
               suspect.response = status === 3 ? 'skipped' : 'dismissed';
+              break;
             }
           }
         },
@@ -82,6 +86,7 @@ export class TyposService {
           for (let suspect of this.suspectsInProcess) {
             if (suspect.id === id) {
               suspect.response = error.error;
+              break;
             }
           }
         }
@@ -92,6 +97,7 @@ export class TyposService {
   markInProcess() {
     this.suspectsInProcess.unshift(this.suspectWord);
     this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
+    this.getTypos();
   }
 
   getLink(suspect: ITypo){
