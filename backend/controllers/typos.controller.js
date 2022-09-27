@@ -15,6 +15,9 @@ exports.getTypos = async (req, res) => {
 
 exports.replaceTypo = async (req, res) => {
   let articleText = await this.getArticleText(req, res);
+  if (typeof articleText !== "string") {
+    return res.status(400).send("could not get article");
+  }
   let oldcontext = req.body.contextBefore;
   let newcontext = oldcontext.replace(
     new RegExp(this.escapeRegex(req.body.suspect) + "$"),
@@ -33,7 +36,7 @@ exports.replaceTypo = async (req, res) => {
   }
 
   const session = this.getSession(req, res);
-  if(!session.displayName){
+  if (!session.displayName) {
     return;
   }
   let token = await this.getCSRF(req, session);
@@ -71,7 +74,7 @@ exports.replaceTypo = async (req, res) => {
 
 exports.dismissTypo = async (req, res) => {
   const session = this.getSession(req, res);
-  if(!session.displayName){
+  if (!session.displayName) {
     return;
   }
   res.status(200).json({
@@ -91,7 +94,7 @@ exports.getViews = async (req, res) => {
       "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/" +
       req.body.project +
       "/all-access/user/" +
-      req.body.title +
+      encodeURI(req.body.title) +
       "/daily/2022082700/2022082800",
     json: true,
   };
@@ -117,18 +120,21 @@ exports.getArticleText = async (req, res) => {
       "https://" +
       req.body.project +
       ".org/w/api.php?action=query&prop=revisions&titles=" +
-      req.body.title +
+      encodeURI(req.body.title) +
       "&rvslots=*&rvprop=content&formatversion=2&format=json",
   };
 
-  return rp(options).then((data) => {
-    if (!JSON.parse(data).query.pages[0].revisions[0].slots.main.content) {
-      return res.status(400).send("could not get article");
-    } else {
-      return (req.body.articleText =
-        JSON.parse(data).query.pages[0].revisions[0].slots.main.content);
-    }
-  });
+  return rp(options)
+    .then((data) => {
+      if (!JSON.parse(data).query.pages[0].revisions[0].slots.main.content) {
+        return res.status(400).send("could not get article");
+      } else {
+        return JSON.parse(data).query.pages[0].revisions[0].slots.main.content;
+      }
+    })
+    .catch(function (err) {
+      return err;
+    });
 };
 
 exports.escapeRegex = (str) => {
@@ -165,8 +171,10 @@ exports.getSession = (req, res) => {
     }
   }
 
-  if(!session){
-    return res.status(400).send("failed getting login session, try logging again");
+  if (!session) {
+    return res
+      .status(400)
+      .send("failed getting login session, try logging again");
   }
 
   return session;
