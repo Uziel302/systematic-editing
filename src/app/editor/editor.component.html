@@ -14,12 +14,12 @@
     </div>
     <div class="title">
       found in:
-      <a [attr.href]="linkify(typosService.suspectWord.title)">{{
+      <a [attr.href]="linkify(typosService.suspectWord.title)" target="_blank">{{
         typosService.suspectWord.title
       }}</a>
     </div>
     <div class="context-before">
-      {{ typosService.suspectWord.contextBefore }}
+      context: {{ typosService.suspectWord.contextBefore }}
     </div>
     <div class="context-after">
       <b>{{ typosService.suspectWord.suspect }}</b>
@@ -33,17 +33,14 @@
     </div>
     
     <div class="edit-error">{{ typosService.errorMessage }}</div>
-    <a
-      class="edit-success"
-      [attr.href]="
-        'https://' +
-        typosService.suspectWord.project +
-        '.org/w/index.php?title=' +
-        typosService.suspectWord.title +
-        '&diff=curr&oldid=prev'
-      "
-      >{{ typosService.successMessage }}</a
-    >
   </div>
   <br />
+  <div id="process-container">
+    <div class="proccess-suspect" *ngFor="let process of typosService.suspectsInProcess">
+      {{ process.suspect }} => {{ process.correction }} in <a [attr.href]="typosService.getLink(process)" target="_blank">{{process.title}}</a>
+      <br>
+      <div *ngIf="!process.responseLink">{{process.response ? process.response : 'In process'}}</div>
+      <a *ngIf="process.responseLink" [attr.href]="process.responseLink" target="_blank">{{process.response}}</a>
+    </div>
+  </div>
 </div>

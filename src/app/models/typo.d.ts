@@ -6,4 +6,6 @@ export interface ITypo {
   contextBefore: string;
   contextAfter: string;
   project: string;
+  response: string;
+  responseLink: string;
 }

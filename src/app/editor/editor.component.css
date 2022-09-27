@@ -1,9 +1,10 @@
 #container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   text-align: center;
+  margin-left: 50px;
 }
 
 .typo-container {
@@ -24,4 +25,8 @@
 .action-button {
   margin: 10px 10px 10px 0;
   font-size: 30px;
+}
+
+#process-container {
+  text-align: left;
 }
