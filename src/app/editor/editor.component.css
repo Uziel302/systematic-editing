@@ -4,18 +4,17 @@
   align-items: flex-start;
   flex-direction: column;
   text-align: center;
-  margin-left: 50px;
 }
 
 .typo-container {
   text-align: left;
   font-size: 25px;
-  width: 70%;
 }
 
-.replacement, .replacement input {
+.replacement,
+.replacement input {
   font-size: 35px;
-  font-family: 'Arial';
+  font-family: "Arial";
 }
 
 .action-buttons {
@@ -23,10 +22,34 @@
 }
 
 .action-button {
-  margin: 10px 10px 10px 0;
-  font-size: 30px;
+  margin: 10px 0;
+  font-size: 25px;
 }
 
 #process-container {
   text-align: left;
+}
+
+.action-buttons.wide-none {
+  justify-content: space-between;
+}
+
+.narrow-none .action-button {
+  margin-right: 10px;
+}
+
+@media screen and (min-width: 1421px) {
+  .wide-none {
+    display: none !important;
+  }
+
+  #container{
+    margin: 50px;
+  }
+}
+
+@media screen and (max-width: 1420px) {
+  .narrow-none {
+    display: none !important;
+  }
 }
