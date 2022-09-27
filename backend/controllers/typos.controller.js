@@ -4,6 +4,7 @@ const rp = require("request-promise");
 const oauthFetchJson = require("oauth-fetch-json");
 const FIXED_STATUS = 1;
 const NOT_FOUND_STATUS = 4;
+const SERVED_STATUS = 5;
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
@@ -15,6 +16,11 @@ exports.getTypos = async (req, res) => {
         let text = await this.getModifiedArticle(datum);
         if(typeof text === 'string'){
           filterData.push(datum);
+          knex(tableName)
+          .update({ status: SERVED_STATUS, fixer: 'system' })
+          .where({ id: datum.id })
+          .then((u) => {})
+          .catch((e) => {});
         } else {
           knex(tableName)
           .update({ status: NOT_FOUND_STATUS, fixer: 'system' })
@@ -28,9 +34,9 @@ exports.getTypos = async (req, res) => {
 };
 
 exports.replaceTypo = async (req, res) => {
-  const session = this.getSession(req, res);
+  const session = this.getSession(req);
   if (!session.displayName) {
-    return;
+    return res.status(400).send(session.error);
   }
   let token = await this.getCSRF(req, session);
   if (!token.query) {
@@ -72,9 +78,9 @@ exports.replaceTypo = async (req, res) => {
 };
 
 exports.dismissTypo = async (req, res) => {
-  const session = this.getSession(req, res);
+  const session = this.getSession(req);
   if (!session.displayName) {
-    return;
+    return res.status(400).send(session.error);
   }
   res.status(200).json({
     success: true,
@@ -158,7 +164,7 @@ exports.edit = async (req, session, params) => {
   return oauthFetchJson(url, params, { method: "POST" }, session);
 };
 
-exports.getSession = (req, res) => {
+exports.getSession = (req) => {
   let session = null;
   let sessions = req.sessionStore.sessions;
 
@@ -171,13 +177,25 @@ exports.getSession = (req, res) => {
   }
 
   if (!session) {
-    return res
-      .status(400)
-      .send("failed getting login session, try logging again");
+    return {error: "failed getting login session, try logging again"};
   }
 
   return session;
 };
+
+exports.checkSession = (req, res) => {
+  let session = this.getSession(req);
+  if(session.displayName){
+    return res
+    .status(200)
+    .send({username: session.displayName});
+  }
+
+  return res
+  .status(400)
+  .send(session);
+
+}
 
 exports.getModifiedArticle = async (typo)=>{
   let articleText = await this.getArticleText(typo);

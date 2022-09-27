@@ -16,10 +16,6 @@ export class LoginSuccessComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loginService.username = this.route.snapshot.paramMap.get('name') ?? '';
-    localStorage.setItem('username', this.loginService.username);
-    if (this.loginService.username) {
-      this.router.navigate(['/']);
-    }
+    this.router.navigate(['/']);
   }
 }

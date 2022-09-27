@@ -38,6 +38,10 @@
   #container {
     margin: 50px;
   }
+
+  #text-part{
+    min-height: 200px;
+  }
 }
 
 @media screen and (max-width: 1420px) {
