@@ -4,11 +4,9 @@
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  text-align: center;
 }
 
 .typo-container {
-  text-align: left;
   font-size: 25px;
 }
 
@@ -62,5 +60,9 @@
 
   .context-before, .context-after{
     font-size: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
   }
 }
