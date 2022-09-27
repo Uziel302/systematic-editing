@@ -17,5 +17,6 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.loginService.username = '';
+    this.loginService.clearSession();
   }
 }

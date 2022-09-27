@@ -197,6 +197,13 @@ exports.checkSession = (req, res) => {
 
 }
 
+exports.clearSession = (req, res) => {
+  req.logout();
+  return res
+  .status(200)
+  .send({success: true});
+}
+
 exports.getModifiedArticle = async (typo)=>{
   let articleText = await this.getArticleText(typo);
   if (typeof articleText !== "string") {

@@ -31,7 +31,7 @@ passport.deserializeUser(function (obj, done) {
 router.use(passport.initialize());
 router.use(passport.session());
 
-const { getTypos, replaceTypo, dismissTypo, checkSession } = require("./controllers/typos.controller");
+const { getTypos, replaceTypo, dismissTypo, checkSession, clearSession } = require("./controllers/typos.controller");
 
 router.get("/typos", (req, res) => {
   return getTypos(req, res);
@@ -39,6 +39,10 @@ router.get("/typos", (req, res) => {
 
 router.get("/checkSession", (req, res) => {
   return checkSession(req, res);
+});
+
+router.get("/clearSession", (req, res) => {
+  return clearSession(req, res);
 });
 
 router.post("/replaceTypo", (req, res) => {

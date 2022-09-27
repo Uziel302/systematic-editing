@@ -11,13 +11,19 @@ export class LoginService {
 
   public autoAuthUser() {
     this.http
-    .get<{username: string}>(environment.apiEndPoint + 'checkSession')
-    .subscribe(
-      (data) => {
-        this.username = data.username;
-      },
-      (error) => {
-      }
+      .get<{ username: string }>(environment.apiEndPoint + 'checkSession')
+      .subscribe(
+        (data) => {
+          this.username = data.username;
+        },
+        (error) => {}
+      );
+  }
+
+  clearSession() {
+    this.http.get(environment.apiEndPoint + 'clearSession').subscribe(
+      (data) => {},
+      (error) => {}
     );
   }
 }
