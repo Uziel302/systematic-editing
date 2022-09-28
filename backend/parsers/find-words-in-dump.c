@@ -93,8 +93,8 @@ int main()
       if(found(context,"Image") || found(context,"image")){typo[0]=0;imageflag=0;}
       if(imageflag==0&&c=='\n'){imageflag=1;}
       //skip templates
-      if(found(context,"{{")){typo[0]=0;doublenewline=0;templateflag=0;}
-      if(context[BEFORE-1]=='}'&&c!='}'){templateflag=1;}
+      if(found(context,"{{")){typo[0]=0;doublenewline=0;templateflag++;}
+      if(context[BEFORE-1]=='}'&&c!='}'){templateflag--;}
       if(found(context,"\n\n")){doublenewline=1;}
       //skip links
       if(found(context,"[h")){typo[0]=0;linkflag=0;}
