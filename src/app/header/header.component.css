@@ -1,7 +1,18 @@
 #header-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+#right-header,
+#left-header {
+  display: flex;
+  align-items: center;
+}
+
+#arrow {
+  height: 30px;
+  padding-right: 20px;
 }
 
 .login-button {
@@ -10,3 +21,10 @@
   border: 1px solid gray;
   border-radius: 5px;
 }
+
+@media screen and (min-width: 1421px) {
+  #header-container {
+    margin: 0 50px;
+  }
+}
+ 

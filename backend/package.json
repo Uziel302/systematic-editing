@@ -18,6 +18,9 @@
     "express-validator": "^6.14.2",
     "knex": "^2.2.0",
     "mysql": "^2.18.1",
-    "passport-mediawiki-oauth": "^0.1.0"
+    "oauth-fetch-json": "^0.3.3",
+    "passport-mediawiki-oauth": "^0.1.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   }
 }

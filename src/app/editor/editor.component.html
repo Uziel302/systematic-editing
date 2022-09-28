@@ -1,14 +1,82 @@
 <div id="container">
-  <h1>Welcome to systematic editing!</h1>
+  <h1>Correct a typo in one click</h1>
   <h2>
-    Here is the place to edit texts in a systematic way,
-    <br>instead of ad hoc copy editing and styling.
+    A new version of a Wikipedia project by the same name, aimed to correct
+    typos in Wikipedia.
   </h2>
-  <h3>As first step, we focus on fixing suspect typos in Wikipedia.</h3>
+
+  <div *ngIf="!typosService.suspectWord.suspect" class="edit-error">
+    {{ typosService.errorMessage }}
+  </div>
+
+  <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
+    <div id="text-part">
+      <div class="replacement">
+        {{ typosService.suspectWord.suspect }} =>
+        <input [(ngModel)]="typosService.suspectWord.correction" />
+      </div>
+      <div class="title">
+        found in:
+        <a
+          [attr.href]="linkify(typosService.suspectWord.title)"
+          target="_blank"
+          >{{ typosService.suspectWord.title }}</a
+        >
+      </div>
+      <div class="context-before">
+        context: 
+        {{ typosService.suspectWord.contextBefore }}
+      </div>
+      <div class="context-after">
+        <b style="font-weight:600">{{ typosService.suspectWord.suspect }}</b>
+        {{ typosService.suspectWord.contextAfter }}
+      </div>
+    </div>
+    
+    <div id="buttons-part">
+      <div class="action-buttons narrow-none">
+        <button class="action-button" (click)="replace()">Replace</button>
+        <button class="action-button" (click)="dismiss()">Dismiss</button>
+        <button class="action-button" (click)="skip()">Skip</button>
+        <button class="action-button action-template" (click)="template()">
+          Add typo template
+        </button>
+      </div>
   
-  <button (click)="typosService.getTypos()">click here to get the next suspect typo</button>
+      <div class="action-buttons wide-none">
+        <button class="action-button" (click)="skip()">Skip</button>
+        <button class="action-button action-template" (click)="template()">
+          Add typo template
+        </button>
+      </div>
+      <div class="action-buttons wide-none">
+        <button class="action-button" (click)="replace()">Replace</button>
+        <button class="action-button" (click)="dismiss()">Dismiss</button>
+      </div>
+      <div class="edit-error">{{ typosService.errorMessage }}</div>
+    </div>
 
-  <h1>{{stringi(typosService.suspectWord)}}</h1>
-
-  <br>
+  </div>
+  <br />
+  <div id="process-container">
+    <div
+      class="proccess-suspect"
+      *ngFor="let process of typosService.suspectsInProcess"
+    >
+      {{ process.suspect }} => {{ process.correction }} in
+      <a [attr.href]="typosService.getLink(process)" target="_blank">{{
+        process.title
+      }}</a>
+      <br />
+      <div *ngIf="!process.responseLink">
+        {{ process.response ? process.response : "In process" }}
+      </div>
+      <a
+        *ngIf="process.responseLink"
+        [attr.href]="process.responseLink"
+        target="_blank"
+        >{{ process.response }}</a
+      >
+    </div>
+  </div>
 </div>

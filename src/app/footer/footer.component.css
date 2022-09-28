@@ -1,4 +1,9 @@
 #container {
-  display: flex;
-  justify-content: center;
+  font-family: "Open Sans";
+}
+
+@media screen and (min-width: 1421px) {
+  #container {
+    margin: 50px;
+  }
 }

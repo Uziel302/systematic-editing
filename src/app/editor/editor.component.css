@@ -1,7 +1,68 @@
 #container {
+  font-family: "Open Sans";
+}
+
+.typo-container {
+  font-size: 25px;
+}
+
+.replacement,
+.replacement input {
+  font-size: 35px;
+  font-family: "Open Sans";
+}
+
+.action-buttons {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
+}
+
+.action-button {
+  margin: 10px 0;
+  font-size: 25px;
+  font-family: "Open Sans";
+}
+
+.action-buttons.wide-none {
+  justify-content: space-between;
+}
+
+.narrow-none .action-button {
+  margin-right: 10px;
+}
+
+@media screen and (min-width: 1421px) {
+  .wide-none {
+    display: none !important;
+  }
+
+  #container {
+    margin: 50px;
+  }
+
+  #text-part{
+    min-height: 200px;
+  }
+}
+
+@media screen and (max-width: 1420px) {
+  .narrow-none {
+    display: none !important;
+  }
+
+  .replacement,
+  .replacement input {
+    font-size: 25px;
+  }
+
+  .context-before, .context-after{
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  #text-part{
+    min-height: 400px;
+  }
 }
