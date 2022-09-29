@@ -97,7 +97,9 @@ export class TyposService {
   markInProcess() {
     this.suspectsInProcess.unshift(this.suspectWord);
     this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
-    this.getTypos();
+    if(this.suspects.length < 3){
+      this.getTypos();
+    }
   }
 
   getLink(suspect: ITypo) {
