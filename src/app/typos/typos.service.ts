@@ -31,7 +31,7 @@ export class TyposService {
           this.errorMessage = 'could not get new typos from server';
         } else {
           this.suspects.push(...data);
-          if(!this.suspectWord.suspect){
+          if (!this.suspectWord.suspect) {
             this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
           }
         }
@@ -100,11 +100,13 @@ export class TyposService {
     this.getTypos();
   }
 
-  getLink(suspect: ITypo){
-    return 'https://' +
-    suspect.project +
-    '.org/w/index.php?title=' +
-    suspect.title +
-    '&diff=curr&oldid=prev';
+  getLink(suspect: ITypo) {
+    return (
+      'https://' +
+      suspect.project +
+      '.org/w/index.php?title=' +
+      suspect.title +
+      '&diff=curr&oldid=prev'
+    );
   }
 }

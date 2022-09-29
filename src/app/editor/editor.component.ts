@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+
+import { LoginService } from '../login/login.service';
 import { TyposService } from '../typos/typos.service';
 
 @Component({
@@ -7,10 +9,15 @@ import { TyposService } from '../typos/typos.service';
   styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit {
-  constructor(public typosService: TyposService) {}
+  constructor(
+    public typosService: TyposService,
+    public loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
-    this.typosService.getTypos();
+    if(this.loginService.username){
+      this.typosService.getTypos();
+    }
   }
 
   linkify(title: string) {

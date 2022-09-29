@@ -35,23 +35,23 @@
     
     <div id="buttons-part">
       <div class="action-buttons narrow-none">
-        <button class="action-button" (click)="replace()">Replace</button>
-        <button class="action-button" (click)="dismiss()">Dismiss</button>
-        <button class="action-button" (click)="skip()">Skip</button>
-        <button class="action-button action-template" (click)="template()">
+        <button class="action-button" [disabled]="!loginService.username" (click)="replace()">Replace</button>
+        <button class="action-button" [disabled]="!loginService.username" (click)="dismiss()">Dismiss</button>
+        <button class="action-button" [disabled]="!loginService.username" (click)="skip()">Skip</button>
+        <button class="action-button action-template" [disabled]="!loginService.username" (click)="template()">
           Add typo template
         </button>
       </div>
   
       <div class="action-buttons wide-none">
-        <button class="action-button" (click)="skip()">Skip</button>
-        <button class="action-button action-template" (click)="template()">
+        <button class="action-button" [disabled]="!loginService.username" (click)="skip()">Skip</button>
+        <button class="action-button action-template" [disabled]="!loginService.username" (click)="template()">
           Add typo template
         </button>
       </div>
       <div class="action-buttons wide-none">
-        <button class="action-button" (click)="replace()">Replace</button>
-        <button class="action-button" (click)="dismiss()">Dismiss</button>
+        <button class="action-button" [disabled]="!loginService.username" (click)="replace()">Replace</button>
+        <button class="action-button" [disabled]="!loginService.username" (click)="dismiss()">Dismiss</button>
       </div>
       <div class="edit-error">{{ typosService.errorMessage }}</div>
     </div>

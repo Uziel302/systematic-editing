@@ -12,21 +12,22 @@ exports.getTypos = async (req, res) => {
     .limit(3)
     .then(async (data) => {
       let filterData = [];
-      for(let datum of data){
-        let text = await this.getModifiedArticle(datum);
-        if(typeof text === 'string'){
+      for (let datum of data) {
+        let text = await this.getOrigModifiedArticle(datum);
+        if (typeof text.articleText === "string") {
+          datum = this.addContext(datum, text.articleText);
           filterData.push(datum);
           knex(tableName)
-          .update({ status: SERVED_STATUS, fixer: 'system' })
-          .where({ id: datum.id })
-          .then((u) => {})
-          .catch((e) => {});
+            .update({ status: SERVED_STATUS, fixer: "system" })
+            .where({ id: datum.id })
+            .then((u) => {})
+            .catch((e) => {});
         } else {
           knex(tableName)
-          .update({ status: NOT_FOUND_STATUS, fixer: 'system' })
-          .where({ id: datum.id })
-          .then((u) => {})
-          .catch((e) => {});
+            .update({ status: NOT_FOUND_STATUS, fixer: "system" })
+            .where({ id: datum.id })
+            .then((u) => {})
+            .catch((e) => {});
         }
       }
       res.status(200).json(filterData);
@@ -44,8 +45,8 @@ exports.replaceTypo = async (req, res) => {
   }
   token = token.query.tokens.csrftoken;
 
-  const text = await this.getModifiedArticle(req.body);
-  if(typeof text !== 'string'){
+  const text = await this.getOrigModifiedArticle(req.body);
+  if (typeof text.newArticleText !== "string") {
     return res.status(400).send("failed finding typo in article");
   }
 
@@ -60,7 +61,7 @@ exports.replaceTypo = async (req, res) => {
       "->" +
       req.body.correction +
       " - [[Wikipedia:Correct typos in one click|Correct typos in one click]]",
-    text,
+    text: text.newArticleText,
     token,
     watchlist: "nochange",
   };
@@ -177,7 +178,7 @@ exports.getSession = (req) => {
   }
 
   if (!session) {
-    return {error: "failed getting login session, try logging again"};
+    return { error: "failed getting login session, try logging again" };
   }
 
   return session;
@@ -185,45 +186,48 @@ exports.getSession = (req) => {
 
 exports.checkSession = (req, res) => {
   let session = this.getSession(req);
-  if(session.displayName){
-    return res
-    .status(200)
-    .send({username: session.displayName});
+  if (session.displayName) {
+    return res.status(200).send({ username: session.displayName });
   }
 
-  return res
-  .status(400)
-  .send(session);
-
-}
+  return res.status(400).send(session);
+};
 
 exports.clearSession = (req, res) => {
   req.logout();
-  return res
-  .status(200)
-  .send({success: true});
-}
+  return res.status(200).send({ success: true });
+};
 
-exports.getModifiedArticle = async (typo)=>{
+exports.getOrigModifiedArticle = async (typo) => {
   let articleText = await this.getArticleText(typo);
   if (typeof articleText !== "string") {
-    return {error: "could not get article"};
+    return { error: "could not get article" };
   }
-  let oldcontext = typo.contextBefore;
+  //when getting data from db, no context yet, so suspect will be used instead
+  let oldcontext = typo.contextBefore ? typo.contextBefore : typo.suspect;
   let newcontext = oldcontext.replace(
     new RegExp(this.escapeRegex(typo.suspect) + "$"),
     typo.correction
   );
   if (newcontext === oldcontext) {
-    return {error: "word not found in context line"};
+    return { error: "word not found in context line" };
   }
-  const startBreak = typo.contextBefore.match(/^[a-z]/i) ? "\\b" : "";
+  const startBreak = oldcontext.match(/^[a-z]/i) ? "\\b" : "";
   const newArticleText = articleText.replace(
-    new RegExp(startBreak + this.escapeRegex(typo.contextBefore) + "\\b"),
+    new RegExp(startBreak + this.escapeRegex(oldcontext) + "\\b"),
     newcontext
   );
   if (newArticleText === articleText) {
-    return {error: "Could not find suspect word in article"};
+    return { error: "Could not find suspect word in article" };
   }
-  return newArticleText;
-}
+  return { articleText, newArticleText };
+};
+
+exports.addContext = (typo, text) => {
+  let regex = new RegExp(".{30}" + typo.suspect, "s");
+  typo.contextBefore = text.match(regex)[0];
+
+  regex = new RegExp("(?<="+typo.suspect + ").{30}", "s");
+  typo.contextAfter = text.match(regex)[0];
+  return typo;
+};

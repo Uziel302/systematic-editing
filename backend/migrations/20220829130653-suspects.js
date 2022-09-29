@@ -29,7 +29,7 @@ exports.up = function (db, callback) {
       },
       title: {
         type: "string",
-        length: 100,
+        length: 200,
       },
       suspect: {
         type: "string",
@@ -38,14 +38,6 @@ exports.up = function (db, callback) {
       correction: {
         type: "string",
         length: 100,
-      },
-      contextBefore: {
-        type: "string",
-        length: 400,
-      },
-      contextAfter: {
-        type: "string",
-        length: 400,
       },
       type: {
         type: "string",
