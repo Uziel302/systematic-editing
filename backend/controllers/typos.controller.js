@@ -66,6 +66,9 @@ exports.replaceTypo = async (req, res) => {
     watchlist: "nochange",
   };
   let result = await this.edit(req, session, params);
+  if(result.error){
+    return res.status(400).json(result.error);
+  }
   if (result.edit.result === "Success") {
     res.status(200).json({
       result,
