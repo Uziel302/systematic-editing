@@ -15,9 +15,7 @@ export class EditorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(this.loginService.username){
-      this.typosService.getTypos();
-    }
+    this.typosService.getTypos();
   }
 
   linkify(title: string) {
