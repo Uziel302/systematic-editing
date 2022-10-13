@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 app.use(cors());
 const indexRouter = require("./router.js");
+const port = parseInt(process.env.PORT, 10) ; 
 
 app.use(
   require("express-session")({
@@ -22,4 +23,4 @@ app.use(
 
 app.use("/api", indexRouter);
 
-app.listen(4000, () => console.log("Server is running on port 4000"));
+app.listen(port, () => console.log("Server is running on port "+port));
