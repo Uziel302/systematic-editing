@@ -1,3 +1,5 @@
+const crendentials = require('./credentials.json');
+
 module.exports = require("knex")({
   client: "mysql",
   connection: {
