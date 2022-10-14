@@ -1,38 +1,27 @@
 {
-  "name": "systematic-editing",
-  "version": "0.0.0",
+  "name": "systematic-api",
+  "version": "1.0.0",
+  "description": "api to get systematic edit offers and save them",
+  "main": "server.js",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "private": true,
+  "author": "Asaf Malin",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@angular/animations": "^14.0.0",
-    "@angular/common": "^14.0.0",
-    "@angular/compiler": "^14.0.0",
-    "@angular/core": "^14.0.0",
-    "@angular/forms": "^14.0.0",
-    "@angular/platform-browser": "^14.0.0",
-    "@angular/platform-browser-dynamic": "^14.0.0",
-    "@angular/router": "^14.0.0",
-    "rxjs": "~7.5.0",
-    "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^14.0.6",
-    "@angular/cli": "~14.0.6",
-    "@angular/compiler-cli": "^14.0.0",
-    "@types/jasmine": "~4.0.0",
-    "jasmine-core": "~4.1.0",
-    "karma": "~6.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.2.0",
-    "karma-jasmine": "~5.0.0",
-    "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.7.2"
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "db-migrate": "^0.11.13",
+    "db-migrate-mysql": "^2.2.0",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.14.2",
+    "knex": "^2.2.0",
+    "mysql": "^2.18.1",
+    "oauth-fetch-json": "^0.3.3",
+    "passport-mediawiki-oauth": "^0.1.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   }
 }
