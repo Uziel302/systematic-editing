@@ -7,7 +7,7 @@ passport.use(
     {
       consumerKey: process.env.consumerKey,
       consumerSecret: process.env.consumerSecret,
-      callbackURL: "https://ctioc.org/api/auth/mediawiki/callback",
+      callbackURL: "https://typos.toolforge.org/api/auth/mediawiki/callback",
     },
     function (token, tokenSecret, profile, done) {
       profile.oauth = {
