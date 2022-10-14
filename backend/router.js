@@ -1,18 +1,20 @@
 const express = require("express");
+const crendentials = require('./credential.json');
+
 const router = express.Router();
 const MediaWikiStrategy = require("passport-mediawiki-oauth").OAuthStrategy;
 const passport = require("passport");
 passport.use(
   new MediaWikiStrategy(
     {
-      consumerKey: process.env.consumerKey,
-      consumerSecret: process.env.consumerSecret,
+      consumerKey: crendentials.consumer_key,
+      consumerSecret: crendentials.consumer_secret,
       callbackURL: "https://typos.toolforge.org/api/auth/mediawiki/callback",
     },
     function (token, tokenSecret, profile, done) {
       profile.oauth = {
-        consumer_key: process.env.consumerKey,
-        consumer_secret: process.env.consumerSecret,
+        consumer_key: crendentials.consumer_key,
+        consumer_secret: crendentials.consumer_secret,
         token: token,
         token_secret: tokenSecret,
       };
@@ -62,7 +64,7 @@ router.get(
   passport.authenticate("mediawiki", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect((process.env.front ?? "") + "success/" + req.user.displayName);
+    res.redirect((crendentials.front ?? "") + "success/" + req.user.displayName);
   }
 );
 module.exports = router;

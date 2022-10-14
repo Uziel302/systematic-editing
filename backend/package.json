@@ -2,10 +2,10 @@
   "name": "systematic-api",
   "version": "1.0.0",
   "description": "api to get systematic edit offers and save them",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "author": "Asaf Malin",
   "license": "GPL-3.0-or-later",
