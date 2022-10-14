@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiEndPoint: 'https://ctioc.org/api/',
+  apiEndPoint: 'https://typos.toolforge.org/api/',
 };
