@@ -169,16 +169,7 @@ exports.edit = async (req, session, params) => {
 };
 
 exports.getSession = (req) => {
-  let session = null;
-  let sessions = req.sessionStore.sessions;
-
-  for (let oneSession in sessions) {
-    let user = JSON.parse(sessions[oneSession])?.passport?.user;
-    if (user) {
-      session = user.oauth;
-      session.displayName = user.displayName;
-    }
-  }
+  let session = req.session?.user;
 
   if (!session) {
     return { error: "failed getting login session, try logging again" };

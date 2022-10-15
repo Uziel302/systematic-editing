@@ -55,6 +55,7 @@ app.get(
   "/auth/mediawiki/callback",
   passport.authenticate("mediawiki", { failureRedirect: "/login" }),
   function (req, res) {
+    req.session.user = req.user;
     // Successful authentication, redirect home.
     res.redirect((crendentials.front ?? ""));
   }
