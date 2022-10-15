@@ -5,7 +5,7 @@ const cors = require("cors");
 app.use(cors());
 const indexRouter = require("./router.js");
 const authRouter = require("./auth.js");
-const port = parseInt(process.env.PORT, 10); 
+const port = parseInt(process.env.PORT ?? 3000, 10); 
 
 app.use(
   require("express-session")({
