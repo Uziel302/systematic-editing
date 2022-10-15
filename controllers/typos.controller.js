@@ -218,10 +218,10 @@ exports.getOrigModifiedArticle = async (typo) => {
 };
 
 exports.addContext = (typo, text) => {
-  let regex = new RegExp(" .{1,120}" + typo.suspect, "s");
+  let regex = new RegExp(" .{1,120}[\n \t]" + typo.suspect, "s");
   typo.contextBefore = text.match(regex) ? text.match(regex)[0] : '';
 
-  regex = new RegExp("(?<="+typo.suspect + ").{1,300} ", "s");
+  regex = new RegExp("(?<="+typo.contextBefore + ").{1,300} ", "s");
   typo.contextAfter = text.match(regex) ? text.match(regex)[0] : '';
   return typo;
 };
