@@ -43,7 +43,7 @@ router.get(
   passport.authenticate("mediawiki", { failureRedirect: "/login" }),
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect((crendentials.front ?? ""));
+    res.redirect((crendentials.front ?? "") + "success/" + req.user.displayName);
   }
 );
 module.exports = router;
