@@ -206,7 +206,11 @@ exports.getOrigModifiedArticle = async (typo) => {
   if (newcontext === oldcontext) {
     return { error: "word not found in context line" };
   }
-  const newArticleText = articleText.replace(oldcontext, newcontext);
+  const startBreak = oldcontext.match(/^[a-z]/i) ? "\\b" : "";
+  const newArticleText = articleText.replace(
+    new RegExp(startBreak + this.escapeRegex(oldcontext) + "\\b"),
+    newcontext
+  );
   if (newArticleText === articleText) {
     return { error: "Could not find suspect word in article" };
   }
