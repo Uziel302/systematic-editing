@@ -11,7 +11,7 @@ export class LoginService {
 
   public autoAuthUser() {
     this.http
-      .get<{ username: string }>(environment.apiEndPoint + 'api/checkSession')
+      .get<{ username: string }>(environment.apiEndPoint + 'checkSession')
       .subscribe(
         (data) => {
           this.username = data.username;
@@ -21,7 +21,7 @@ export class LoginService {
   }
 
   clearSession() {
-    this.http.get(environment.apiEndPoint + 'api/clearSession').subscribe(
+    this.http.get(environment.apiEndPoint + 'clearSession').subscribe(
       (data) => {},
       (error) => {}
     );

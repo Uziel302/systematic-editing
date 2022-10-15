@@ -25,7 +25,7 @@ export class TyposService {
   constructor(private http: HttpClient) {}
 
   getTypos(): void {
-    this.http.get<ITypo[]>(environment.apiEndPoint + 'api/typos').subscribe(
+    this.http.get<ITypo[]>(environment.apiEndPoint + 'typos').subscribe(
       (data) => {
         if (Object.keys(data).length === 0) {
           this.errorMessage = 'could not get new typos from server';
@@ -43,7 +43,7 @@ export class TyposService {
   replaceTypo() {
     let id = this.suspectWord.id;
     this.http
-      .post(environment.apiEndPoint + 'api/replaceTypo', this.suspectWord)
+      .post(environment.apiEndPoint + 'replaceTypo', this.suspectWord)
       .subscribe(
         (data) => {
           for (let suspect of this.suspectsInProcess) {
@@ -69,7 +69,7 @@ export class TyposService {
   dismissTypo(status: number) {
     let id = this.suspectWord.id;
     this.http
-      .post(environment.apiEndPoint + 'api/dismissTypo', {
+      .post(environment.apiEndPoint + 'dismissTypo', {
         id: this.suspectWord.id,
         status,
       })
