@@ -13,7 +13,7 @@
     <div id="text-part">
       <div class="replacement">
         {{ typosService.suspectWord.suspect }} =>
-        <input [(ngModel)]="typosService.suspectWord.correction" />
+        <input [(ngModel)]="typosService.suspectWord.correction" (click)="prompt()"/>
       </div>
       <div class="title">
         found in:

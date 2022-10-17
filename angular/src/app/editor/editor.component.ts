@@ -54,4 +54,14 @@ export class EditorComponent implements OnInit {
       '}}';
     this.typosService.replaceTypo();
   }
+
+  prompt() {
+    let suspect = this.typosService.suspectWord.suspect;
+    let approvedCorrection = prompt(
+      suspect + ' will be replaced by: ',
+      suspect
+    );
+    if (approvedCorrection === null || approvedCorrection === suspect) return;
+    this.typosService.suspectWord.correction = approvedCorrection;
+  }
 }
