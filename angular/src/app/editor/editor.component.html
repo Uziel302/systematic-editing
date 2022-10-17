@@ -29,7 +29,8 @@
         {{ typosService.suspectWord.contextBefore }}
       </div>
       <div class="context-after">
-        <b style="font-weight:600">{{ typosService.suspectWord.suspect }}</b>
+        <b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b>&nbsp;
+        <b id="correction-in-context">{{ typosService.suspectWord.correction }}</b>
         {{ typosService.suspectWord.contextAfter }}
       </div>
     </div>

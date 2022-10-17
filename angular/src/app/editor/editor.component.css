@@ -35,6 +35,17 @@
   margin-left: 20px;
 }
 
+#suspect-in-context, #correction-in-context {
+  font-weight:600;
+  background: #feeec8;
+  border-radius: 0.33em;
+  padding: 0.25em 0;
+}
+
+#correction-in-context {
+  background: #d8ecff;
+}
+
 @media screen and (min-width: 1421px) {
   .wide-none {
     display: none !important;
