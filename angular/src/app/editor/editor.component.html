@@ -12,7 +12,7 @@
   <div class="typo-container" *ngIf="typosService.suspectWord.suspect">
     <div id="text-part">
       <div class="replacement">
-        {{ typosService.suspectWord.suspect }} =>
+        {{ typosService.suspectWord.suspect }} →
         <input [(ngModel)]="typosService.suspectWord.correction"/>
         <button id="type-button" (click)="prompt()">Type</button>
       </div>

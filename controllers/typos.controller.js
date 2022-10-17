@@ -58,7 +58,7 @@ exports.replaceTypo = async (req, res) => {
     title: req.body.title,
     summary:
       req.body.suspect +
-      "->" +
+      "→" +
       req.body.correction +
       " - [[Wikipedia:Correct typos in one click|Correct typos in one click]]",
     text: text.newArticleText,
