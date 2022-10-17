@@ -15,6 +15,8 @@ export class TyposService {
     title: '',
     contextBefore: '',
     contextAfter: '',
+    fullContext: '',
+    origFullContext: '',
     project: '',
     response: '',
     responseLink: '',
@@ -42,6 +44,10 @@ export class TyposService {
 
   replaceTypo() {
     let id = this.suspectWord.id;
+    this.suspectWord.fullContext =
+      this.suspectWord.contextBefore +
+      this.suspectWord.correction +
+      this.suspectWord.contextAfter;
     this.http
       .post(environment.apiEndPoint + 'api/replaceTypo', this.suspectWord)
       .subscribe(
@@ -97,7 +103,7 @@ export class TyposService {
   markInProcess() {
     this.suspectsInProcess.unshift(this.suspectWord);
     this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
-    if(this.suspects.length < 3){
+    if (this.suspects.length < 3) {
       this.getTypos();
     }
   }

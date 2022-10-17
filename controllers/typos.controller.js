@@ -13,7 +13,7 @@ exports.getTypos = async (req, res) => {
     .then(async (data) => {
       let filterData = [];
       for (let datum of data) {
-        let text = await this.getOrigModifiedArticle(datum);
+        let text = await this.getOrigModifiedArticle(datum, true);
         if (typeof text.articleText === "string") {
           datum = this.addContext(datum, text.articleText);
           filterData.push(datum);
@@ -45,7 +45,7 @@ exports.replaceTypo = async (req, res) => {
   }
   token = token.query.tokens.csrftoken;
 
-  const text = await this.getOrigModifiedArticle(req.body);
+  const text = await this.getOrigModifiedArticle(req.body, false);
   if (typeof text.newArticleText !== "string") {
     return res.status(400).send("failed finding typo in article");
   }
@@ -66,7 +66,7 @@ exports.replaceTypo = async (req, res) => {
     watchlist: "nochange",
   };
   let result = await this.edit(req, session, params);
-  if(result.error){
+  if (result.error) {
     return res.status(400).json(result.error);
   }
   if (result.edit.result === "Success") {
@@ -192,19 +192,22 @@ exports.clearSession = (req, res) => {
   return res.status(200).send({ success: true });
 };
 
-exports.getOrigModifiedArticle = async (typo) => {
+exports.getOrigModifiedArticle = async (typo, fromDB) => {
   let articleText = await this.getArticleText(typo);
   if (typeof articleText !== "string") {
     return { error: "could not get article" };
   }
-  //when getting data from db, no context yet, so suspect will be used instead
-  let oldcontext = typo.contextBefore ? typo.contextBefore : typo.suspect;
-  let newcontext = oldcontext.replace(
-    new RegExp(this.escapeRegex(typo.suspect) + "$"),
-    typo.correction
-  );
+
+  let oldcontext = typo.origFullContext;
+  let newcontext = typo.fullContext;
+
+  //no context yet
+  if(fromDB){
+    oldcontext = typo.suspect;
+    newcontext = typo.correction;
+  }
   if (newcontext === oldcontext) {
-    return { error: "word not found in context line" };
+    return { error: "context block was not changed" };
   }
   const startBreak = oldcontext.match(/^[a-z]/i) ? "\\b" : "";
   const newArticleText = articleText.replace(
@@ -212,16 +215,18 @@ exports.getOrigModifiedArticle = async (typo) => {
     newcontext
   );
   if (newArticleText === articleText) {
-    return { error: "Could not find suspect word in article" };
+    return { error: "Could not find original context block in article" };
   }
   return { articleText, newArticleText };
 };
 
 exports.addContext = (typo, text) => {
-  let regex = new RegExp(" .{1,120}\\b" + typo.suspect + "\\b", "s");
-  typo.contextBefore = text.match(regex) ? text.match(regex)[0] : '';
+  let regex = new RegExp(" .{1,120}\\b(?=" + typo.suspect + "\\b)", "s");
+  typo.contextBefore = text.match(regex) ? text.match(regex)[0] : "";
 
-  regex = new RegExp("(?<=\\b"+typo.suspect + "\\b).{1,300} ", "s");
-  typo.contextAfter = text.match(regex) ? text.match(regex)[0] : '';
+  regex = new RegExp("(?<=\\b" + typo.suspect + ")\\b.{1,300} ", "s");
+  typo.contextAfter = text.match(regex) ? text.match(regex)[0] : "";
+
+  typo.origFullContext = typo.contextBefore + typo.suspect + typo.contextAfter;
   return typo;
 };

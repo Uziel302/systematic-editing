@@ -13,7 +13,7 @@
     <div id="text-part">
       <div class="replacement">
         {{ typosService.suspectWord.suspect }} →
-        <input [(ngModel)]="typosService.suspectWord.correction"/>
+        <input [(ngModel)]="typosService.suspectWord.correction" />
         <button id="type-button" (click)="prompt()">Type</button>
       </div>
       <div class="title">
@@ -24,40 +24,81 @@
           >{{ typosService.suspectWord.title }}</a
         >
       </div>
-      <div class="context-before">
-        context: 
-        {{ typosService.suspectWord.contextBefore }}
-      </div>
-      <div class="context-after">
-        <b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b>&nbsp;
-        <b id="correction-in-context">{{ typosService.suspectWord.correction }}</b>
-        {{ typosService.suspectWord.contextAfter }}
+      context:
+      <div id="context-block" contenteditable>
+        <span ngDefaultControl [(ngModel)]="typosService.suspectWord.contextBefore">{{typosService.suspectWord.contextBefore}}</span
+        ><b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b
+        >&nbsp;<b id="correction-in-context" ngDefaultControl [(ngModel)]="typosService.suspectWord.correction">{{typosService.suspectWord.correction}}</b
+        ><span ngDefaultControl [(ngModel)]="typosService.suspectWord.contextAfter">{{typosService.suspectWord.contextAfter}}</span>
       </div>
     </div>
-    
+
     <div id="buttons-part">
       <div class="action-buttons narrow-none">
-        <button class="action-button" [disabled]="!loginService.username" (click)="replace()">Replace</button>
-        <button class="action-button" [disabled]="!loginService.username" (click)="dismiss()">Dismiss</button>
-        <button class="action-button" [disabled]="!loginService.username" (click)="skip()">Skip</button>
-        <button class="action-button action-template" [disabled]="!loginService.username" (click)="template()">
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="replace()"
+        >
+          Replace
+        </button>
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="dismiss()"
+        >
+          Dismiss
+        </button>
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="skip()"
+        >
+          Skip
+        </button>
+        <button
+          class="action-button action-template"
+          [disabled]="!loginService.username"
+          (click)="template()"
+        >
           Add typo template
         </button>
       </div>
-  
+
       <div class="action-buttons wide-none">
-        <button class="action-button" [disabled]="!loginService.username" (click)="skip()">Skip</button>
-        <button class="action-button action-template" [disabled]="!loginService.username" (click)="template()">
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="skip()"
+        >
+          Skip
+        </button>
+        <button
+          class="action-button action-template"
+          [disabled]="!loginService.username"
+          (click)="template()"
+        >
           Add typo template
         </button>
       </div>
       <div class="action-buttons wide-none">
-        <button class="action-button" [disabled]="!loginService.username" (click)="replace()">Replace</button>
-        <button class="action-button" [disabled]="!loginService.username" (click)="dismiss()">Dismiss</button>
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="replace()"
+        >
+          Replace
+        </button>
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="dismiss()"
+        >
+          Dismiss
+        </button>
       </div>
       <div class="edit-error">{{ typosService.errorMessage }}</div>
     </div>
-
   </div>
   <br />
   <div id="process-container">

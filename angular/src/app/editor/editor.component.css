@@ -35,11 +35,19 @@
   margin-left: 20px;
 }
 
-#suspect-in-context, #correction-in-context {
-  font-weight:600;
+#context-block {
+  outline: -webkit-focus-ring-color auto 1px;
+  white-space: pre-line;
+  line-height: 120%;
+  font-family: monospace;
+}
+
+#suspect-in-context,
+#correction-in-context {
+  font-weight: 600;
   background: #feeec8;
-  border-radius: 0.33em;
-  padding: 0.25em 0;
+  border-radius: 10px;
+  padding: 1px 0;
 }
 
 #correction-in-context {
@@ -55,7 +63,7 @@
     margin: 50px;
   }
 
-  #text-part{
+  #text-part {
     min-height: 200px;
   }
 }
@@ -70,7 +78,7 @@
     font-size: 25px;
   }
 
-  .context-before, .context-after{
+  #context-block {
     font-size: 20px;
   }
 
@@ -78,7 +86,7 @@
     font-size: 28px;
   }
 
-  #text-part{
+  #text-part {
     min-height: 400px;
   }
 }
