@@ -45,9 +45,10 @@ export class TyposService {
   replaceTypo() {
     let id = this.suspectWord.id;
     this.suspectWord.fullContext =
-      this.suspectWord.contextBefore +
-      this.suspectWord.correction +
-      this.suspectWord.contextAfter;
+      (document.getElementById('contextBefore') as HTMLElement).innerText +
+      (document.getElementById('correction-in-context') as HTMLElement)
+        .innerText +
+      (document.getElementById('contextAfter') as HTMLElement).innerText;
     this.http
       .post(environment.apiEndPoint + 'api/replaceTypo', this.suspectWord)
       .subscribe(
