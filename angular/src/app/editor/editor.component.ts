@@ -52,7 +52,9 @@ export class EditorComponent implements OnInit {
       ' ' +
       date.getFullYear() +
       '}}';
-    this.typosService.replaceTypo();
+    setTimeout(() => {
+      this.typosService.replaceTypo();
+    }, 10);
   }
 
   prompt() {
