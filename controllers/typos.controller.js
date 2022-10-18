@@ -209,11 +209,7 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
   if (newcontext === oldcontext) {
     return { error: "context block was not changed" };
   }
-  const startBreak = oldcontext.match(/^[a-z]/i) ? "\\b" : "";
-  const newArticleText = articleText.replace(
-    new RegExp(startBreak + this.escapeRegex(oldcontext) + "\\b"),
-    newcontext
-  );
+  const newArticleText = articleText.replace(oldcontext,newcontext);
   if (newArticleText === articleText) {
     return { error: "Could not find original context block in article" };
   }
