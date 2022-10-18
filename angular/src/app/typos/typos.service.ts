@@ -56,7 +56,8 @@ export class TyposService {
           for (let suspect of this.suspectsInProcess) {
             if (suspect.id === id) {
               suspect.response = 'Success! Click to view the edit';
-              suspect.responseLink = this.getLink(suspect);
+              suspect.responseLink =
+                this.getLink(suspect) + '&diff=curr&oldid=prev';
               break;
             }
           }
@@ -111,11 +112,7 @@ export class TyposService {
 
   getLink(suspect: ITypo) {
     return (
-      'https://' +
-      suspect.project +
-      '.org/w/index.php?title=' +
-      suspect.title +
-      '&diff=curr&oldid=prev'
+      'https://' + suspect.project + '.org/w/index.php?title=' + suspect.title
     );
   }
 }
