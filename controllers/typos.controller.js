@@ -203,7 +203,7 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 
   //no context yet
   if(fromDB){
-    oldcontext = typo.suspect;
+    oldcontext = new RegExp("\\b"+typo.suspect+"\\b");
     newcontext = typo.correction;
   }
   if (newcontext === oldcontext) {
