@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define BEFORE 70
-#define AFTER 150
+#define BEFORE 10
 
 int found(const char *context,const char *text) {
-   int l = strlen(text); 
+   int l = strlen(text);
    return strncmp(text, context+BEFORE-l, l) == 0;
 }
 
@@ -15,22 +14,18 @@ int main()
    int i,j,k=0,lll=0,existing=0,textflag=0,fileflag=1,imageflag=1,templateflag=1,italicflag=1,divflag=1,
    codeflag=1,sourceflag=1,doublenewline=1,poemflag=1,
    galleryflag=1,linkflag=1,quoteflag=1,doublequoteflag=1,doublequoteflag2=1,columnsflag=1,
-   spaceflag=0,noteflag=1,noteflag2=1,namecount=0,nameflag=0,namespaceflag=0, wiktionflag=1;
-   int aftercount=0,contextJump=0, saweng=0,endofcontext=BEFORE;
-   char afterword=' ';
+   spaceflag=0,noteflag=1,noteflag2=1,noteflag3=1,namecount=0,nameflag=0,namespaceflag=0, wiktionflag=1;
+   int saweng=0;
    char typo[80];
    char oldtypo[80];
    char pagename[100];
-   char *p;
+   char *correction;
    char *method;
-   char *number;
-   int place=0;
+   char *location;
    char lastchar=0,lastchar2;
    char (*milon)[61];
    char context[BEFORE];
    milon = calloc (22000000, sizeof(char[61]));
-   int *exists;
-   exists = malloc (22000000 * sizeof(int));
 
    // to access character i of word w
    FILE *fp1 = fopen("enwiki-20220701-pages-articles.xml", "r");
@@ -61,11 +56,6 @@ int main()
    while (c!=EOF){//word loop
       k=0;typo[0]=0;
    while ((c = fgetc(fp1))!=EOF){//letter loop
-      //print after context
-      if(aftercount>0){
-         if(aftercount==1&&(unsigned char)c==0xD7)aftercount=0;
-         if(aftercount>0&&c!='\n'){fprintf(fp3, "%c", c); aftercount--;}
-      }
 
       //save article name: if <title>
       if(found(context,"<title>")){
@@ -78,7 +68,7 @@ int main()
       //close tags in new article
       if(nameflag==1)
          {divflag=1;codeflag=1;galleryflag=1;templateflag=1;doublenewline=1;
-                  columnsflag=1;sourceflag=1;noteflag=1;noteflag2=1;}
+                  columnsflag=1;sourceflag=1;noteflag=1;noteflag2=1;noteflag3=1;}
       //only search within articles text
       if(found(context,"<text")){textflag=1;}
       if(found(context,"</text")){typo[0]=0;textflag=0;}
@@ -93,8 +83,14 @@ int main()
       if(found(context,"Image") || found(context,"image")){typo[0]=0;imageflag=0;}
       if(imageflag==0&&c=='\n'){imageflag=1;}
       //skip templates
-      if(found(context,"{{")){typo[0]=0;doublenewline=0;templateflag++;}
-      if(context[BEFORE-1]=='}'&&c!='}'){templateflag--;}
+      if(found(context,"{{")){
+         typo[0]=0;
+         doublenewline=0;
+         templateflag++;
+      }
+      if(context[BEFORE-1]=='}'&&c!='}'){
+         templateflag--;
+      }
       if(found(context,"\n\n")){doublenewline=1;}
       //skip links
       if(found(context,"[h")){typo[0]=0;linkflag=0;}
@@ -120,11 +116,14 @@ int main()
       if(found(context,"{|")){typo[0]=0;columnsflag=0;}
       if(found(context,"|}")){columnsflag=1;}
       //skip notes
-      if(found(context,";ref")){typo[0]=0;noteflag=0;}
+      if(found(context,";ref&gt;") || found(context,";ref &gt;")){typo[0]=0;noteflag=0;}
       if(found(context,";/ref&")){noteflag=1;}
       //skip notes
       if(found(context,";!--")){typo[0]=0;noteflag2=0;}
-      if(found(context,"--&gt;")){noteflag2=1;}
+      if(found(context,"&gt;")){noteflag2=1;}
+      //skip notes
+      if(found(context,";ref name")){typo[0]=0;noteflag3=0;}
+      if(found(context,"--&gt;")){noteflag3=1;}
       //skip div
       if(found(context,";div")){typo[0]=0;divflag=0;}
       if(found(context,";/div&")){divflag=1;}
@@ -149,7 +148,7 @@ int main()
 
       if(namespaceflag==1&&textflag==1&&spaceflag==1&&fileflag==1&&imageflag==1&&
          galleryflag==1&&italicflag==1&&columnsflag==1&&sourceflag==1&&doublenewline==1&&
-         templateflag==1&&noteflag==1&&noteflag2==1&&divflag==1&&codeflag==1&&
+         templateflag==1&&noteflag==1&&noteflag2==1&&noteflag3==1&&divflag==1&&codeflag==1&&
          linkflag==1&&quoteflag==1&&doublequoteflag==1&&doublequoteflag2==1&&wiktionflag==1)
          {typo[k]=c;k++;}
 
@@ -171,62 +170,17 @@ int main()
       if(k>0&&(c==':'||c=='%'||c=='('||c=='/'||c=='\\'||c=='@'||c=='$'||c=='!'||c=='{'))
       {typo[0]='\0';spaceflag=0;break;}
 
-      }
+   }
       if(strlen(typo)<5)continue;
       int min=0;
       int max=milon_count;
       while(max>=min){
          j=min+(max-min)/2;
          if (strcmp(typo,milon[j]) == 0) {
-            exists[j]++;
-            p=milon[j]+strlen(milon[j])+1;
-            method=p+strlen(p)+1;
-            number=method+strlen(method)+1;
-            place=atoi(number);
-            fprintf(fp3, "\n$$$%s-><!--%s-->", typo,p);
-            for(i=0;i<strlen(p);i++){
-               if(i==place){
-                  fprintf(fp3, "'''%c'''",p[i]);
-               }
-               if(i!=place){
-                  fprintf(fp3, "%c",p[i]);
-               }
-            }
-            fprintf(fp3, "? (%s) context: $@$@ ~~~</nowiki>&&&== [[%s]] ==###<nowiki>~~~ ",method,pagename);
-            aftercount=AFTER;
-            contextJump=1;
-
-            //start context line after at least one space
-            for(i=0;i<BEFORE-2;i++) {
-                     if(context[i]=='\v'||context[i]==' '||
-                        context[i]=='\n'||context[i]=='\r')
-                        {contextJump=i+1;break;}
-               }
-            //if there is newline, start after it
-            for(i=BEFORE-2;i>0;i--) {
-               if(context[i]=='\v'||
-                  context[i]=='&'||context[i]==';'||
-                  context[i]=='\n'||context[i]=='\r') {
-                     contextJump=i+1;break;
-               }
-            }
-
-            //if jumped more than word length, print word
-            if((BEFORE-contextJump)<strlen(typo)+3)fprintf(fp3, "jjjjjj");
-            //if no jump happened and char before it 0xD7, move one further
-            if(contextJump==1&&(unsigned char)context[0]==0xD7)contextJump++;
-            for(i=contextJump;i<endofcontext-1;i++) {
-               fprintf(fp3, "%c", context[i]);
-            }
-
-            fprintf(fp3," </nowiki></br>@@@'''%s'''", typo);
-            if(context[BEFORE-1]!='\v'&&context[BEFORE-1]!=' '&&
-               context[BEFORE-1]!='&'&&context[BEFORE-1]!=';'&&
-               context[BEFORE-1]!='\n'&&context[BEFORE-1]!='\r'){
-                  fprintf(fp3,"%c", context[endofcontext-1]);
-            }
-            fprintf(fp3," <nowiki>");
-            endofcontext=BEFORE;
+            correction=milon[j]+strlen(milon[j])+1;
+            method=correction+strlen(correction)+1;
+            location=method+strlen(method)+1;
+            fprintf(fp3, "\nINSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('en.wikipedia','%s','%s','%s','%s','%s',0,'');", pagename, typo, correction, method, location);
             break;
          }
          if (strcmp(typo,milon[j])>0){min=j+1;}
@@ -234,15 +188,11 @@ int main()
       }
    }
 
-   for(i=0;i<22000000;i++){
-         if(exists[i])fprintf(fp3, "\n%s - %d", milon[i],exists[i]);}
-
    fprintf(fp3,"\nFinally!");
 
    fclose(fp1);
    fclose(fp2);
    fclose(fp3);
-   free(exists);
    free(milon);
    return 0;
 }
