@@ -103,7 +103,6 @@ int main()
       //skip doublequotes
       if(context[BEFORE-1]=='"'){typo[0]=0;doublequoteflag=0;}
       if(doublequoteflag==0&&c=='"'){doublequoteflag=1;}
-      if(doublequoteflag==0&&c=='\n'){doublequoteflag=1;}
       //skip doublequotes2
       if(found(context,"&quot;")){typo[0]=0;doublequoteflag2=0;}
       if(found(context,"&quot")){doublequoteflag2=1;}
