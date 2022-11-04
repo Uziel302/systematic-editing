@@ -54,7 +54,7 @@
   background: #d8ecff;
 }
 
-@media screen and (min-width: 1421px) {
+@media screen and (min-width: 901px) {
   .wide-none {
     display: none !important;
   }
@@ -64,11 +64,10 @@
   }
 
   #text-part {
-    min-height: 200px;
   }
 }
 
-@media screen and (max-width: 1420px) {
+@media screen and (max-width: 900px) {
   .narrow-none {
     display: none !important;
   }
@@ -87,6 +86,5 @@
   }
 
   #text-part {
-    min-height: 400px;
   }
 }

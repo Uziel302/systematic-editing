@@ -24,24 +24,10 @@
           >{{ typosService.suspectWord.title }}</a
         >
       </div>
-      context:
-      <div id="context-block" contenteditable>
-        <span id="contextBefore">{{typosService.suspectWord.contextBefore}}</span
-        ><b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b
-        >&nbsp;<b id="correction-in-context">{{typosService.suspectWord.correction}}</b
-        ><span id="contextAfter">{{typosService.suspectWord.contextAfter}}</span>
-      </div>
     </div>
 
     <div id="buttons-part">
       <div class="action-buttons narrow-none">
-        <button
-          class="action-button"
-          [disabled]="!loginService.username"
-          (click)="replace()"
-        >
-          Replace
-        </button>
         <button
           class="action-button"
           [disabled]="!loginService.username"
@@ -55,6 +41,13 @@
           (click)="skip()"
         >
           Skip
+        </button>
+        <button
+          class="action-button"
+          [disabled]="!loginService.username"
+          (click)="replace()"
+        >
+          Replace
         </button>
         <button
           class="action-button action-template"
@@ -98,6 +91,13 @@
         </button>
       </div>
       <div class="edit-error">{{ typosService.errorMessage }}</div>
+      context:
+      <div id="context-block" contenteditable>
+        <span id="contextBefore">{{typosService.suspectWord.contextBefore}}</span
+        ><b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b
+        >&nbsp;<b id="correction-in-context">{{typosService.suspectWord.correction}}</b
+        ><span id="contextAfter">{{typosService.suspectWord.contextAfter}}</span>
+      </div>
     </div>
   </div>
   <br />
