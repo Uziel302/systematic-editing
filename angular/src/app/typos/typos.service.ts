@@ -30,7 +30,7 @@ export class TyposService {
     this.http.get<ITypo[]>(environment.apiEndPoint + 'api/typos').subscribe(
       (data) => {
         if (Object.keys(data).length === 0) {
-          this.errorMessage = 'could not get new typos from server';
+          this.errorMessage = 'All the typos were handled! We try to generate new batch once a month';
         } else {
           this.suspects.push(...data);
           if (!this.suspectWord.suspect) {
