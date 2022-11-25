@@ -30,11 +30,13 @@ export class TyposService {
     this.http.get<ITypo[]>(environment.apiEndPoint + 'api/typos').subscribe(
       (data) => {
         if (Object.keys(data).length === 0) {
-          this.errorMessage = 'All the typos were handled! We try to generate new batch once a month';
+          this.errorMessage =
+            'All the typos were handled! We try to generate new batch once a month';
         } else {
           this.suspects.push(...data);
           if (!this.suspectWord.suspect) {
             this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
+            this.generateContext();
           }
         }
       },
@@ -44,11 +46,6 @@ export class TyposService {
 
   replaceTypo() {
     let id = this.suspectWord.id;
-    this.suspectWord.fullContext =
-      (document.getElementById('contextBefore') as HTMLElement).innerText +
-      (document.getElementById('correction-in-context') as HTMLElement)
-        .innerText +
-      (document.getElementById('contextAfter') as HTMLElement).innerText;
     this.http
       .post(environment.apiEndPoint + 'api/replaceTypo', this.suspectWord)
       .subscribe(
@@ -105,6 +102,7 @@ export class TyposService {
   markInProcess() {
     this.suspectsInProcess.unshift(this.suspectWord);
     this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
+    this.generateContext();
     if (this.suspects.length < 3) {
       this.getTypos();
     }
@@ -114,5 +112,12 @@ export class TyposService {
     return (
       'https://' + suspect.project + '.org/w/index.php?title=' + suspect.title
     );
+  }
+
+  generateContext(): void {
+    this.suspectWord.fullContext =
+      this.suspectWord.contextBefore +
+      this.suspectWord.correction +
+      this.suspectWord.contextAfter;
   }
 }

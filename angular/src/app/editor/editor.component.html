@@ -13,7 +13,7 @@
     <div id="text-part">
       <div class="replacement">
         {{ typosService.suspectWord.suspect }} →
-        <input [(ngModel)]="typosService.suspectWord.correction" />
+        <input [(ngModel)]="typosService.suspectWord.correction" (input)="typosService.generateContext()"/>
         <button id="type-button" (click)="prompt()">Type</button>
       </div>
       <div class="title">
@@ -56,6 +56,12 @@
         >
           Add typo template
         </button>
+        <button
+          class="action-button"
+          (click)="toggleContext()"
+        >
+        {{contextCopy}}
+        </button>
       </div>
 
       <div class="action-buttons wide-none">
@@ -72,6 +78,12 @@
           (click)="template()"
         >
           Add typo template
+        </button>
+        <button
+          class="action-button"
+          (click)="toggleContext()"
+        >
+        {{contextCopy}}
         </button>
       </div>
       <div class="action-buttons wide-none">
@@ -91,12 +103,26 @@
         </button>
       </div>
       <div class="edit-error">{{ typosService.errorMessage }}</div>
-      context:
-      <div id="context-block" contenteditable>
-        <span id="contextBefore">{{typosService.suspectWord.contextBefore}}</span
-        ><b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b
-        >&nbsp;<b id="correction-in-context">{{typosService.suspectWord.correction}}</b
-        ><span id="contextAfter">{{typosService.suspectWord.contextAfter}}</span>
+      <div *ngIf="!this.editContext">
+        replacement in context:
+        <div id="context-block">
+          <span id="contextBefore">{{
+            typosService.suspectWord.contextBefore
+          }}</span
+          ><b id="suspect-in-context">{{ typosService.suspectWord.suspect }}</b
+          >&nbsp;<b id="correction-in-context">{{
+            typosService.suspectWord.correction
+          }}</b
+          ><span id="contextAfter">{{
+            typosService.suspectWord.contextAfter
+          }}</span>
+        </div>
+      </div>
+      <div *ngIf="this.editContext">
+        editable context:
+        <textarea [(ngModel)]="typosService.suspectWord.fullContext"
+          ></textarea
+        >
       </div>
     </div>
   </div>

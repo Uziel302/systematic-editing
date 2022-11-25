@@ -9,6 +9,9 @@ import { TyposService } from '../typos/typos.service';
   styleUrls: ['./editor.component.css'],
 })
 export class EditorComponent implements OnInit {
+  public editContext: boolean = false;
+  public contextCopy: string = 'Edit context';
+
   constructor(
     public typosService: TyposService,
     public loginService: LoginService
@@ -52,9 +55,8 @@ export class EditorComponent implements OnInit {
       ' ' +
       date.getFullYear() +
       '}}';
-    setTimeout(() => {
+      this.typosService.generateContext();
       this.typosService.replaceTypo();
-    }, 10);
   }
 
   prompt() {
@@ -65,5 +67,16 @@ export class EditorComponent implements OnInit {
     );
     if (approvedCorrection === null || approvedCorrection === suspect) return;
     this.typosService.suspectWord.correction = approvedCorrection;
+    this.typosService.generateContext();
+  }
+
+  toggleContext(): void {
+    this.typosService.generateContext();
+    this.editContext = !this.editContext;
+    if (this.editContext) {
+      this.contextCopy = 'Replacement in context';
+    } else {
+      this.contextCopy = 'Edit context';
+    }
   }
 }
