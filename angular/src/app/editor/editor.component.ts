@@ -75,6 +75,7 @@ export class EditorComponent implements OnInit {
     this.editContext = !this.editContext;
     if (this.editContext) {
       this.contextCopy = 'Replacement in context';
+      this.typosService.suspectWord.fullContext = this.typosService.suspectWord.origFullContext;
     } else {
       this.contextCopy = 'Edit context';
     }
