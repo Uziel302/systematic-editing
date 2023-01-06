@@ -39,6 +39,7 @@ def getVariations(word):
     return variations
 
 f = open('variations.txt', 'w')
+variants = {}
 
 for word in words:
    if words[word]<400:
@@ -46,7 +47,8 @@ for word in words:
    wordVariations = getVariations(word)
    for variationType in wordVariations:
       for variant in wordVariations[variationType]:
-         if variant not in words and len(variant)>0:
+         if len(variant)>0 and variant not in words and variant not in variants:
+            variants[variant] = True
             spot = wordVariations[variationType][variant]
             combined = variant+','+word+','+variationType+','+str(spot)+'\n'
             f.write(combined)
