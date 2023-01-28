@@ -1,6 +1,6 @@
 #list of words by frequency thanks to https://github.com/IlyaSemenov/wikipedia-word-frequency/
 #the file is too big for browsers, got the file by running wget https://raw.githubusercontent.com/IlyaSemenov/wikipedia-word-frequency/master/results/enwiki-2022-08-29.txt
-with open('ruwiki-2022-08-29.txt') as f:
+with open('enwiki-2022-08-29.txt') as f:
    words = {}
    for line in f:
       (key, val) = line.split()
@@ -25,10 +25,10 @@ def getVariations(word):
     for x in range(len(word)-2):
         swap2[(word[0 : x : ] + word[x + 2]  + word[x + 1] + word[x] + word[x + 3 : :])] = x
     #replacing by another letter
-    #for letter in 'aeiou':
-    #    for x in range(len(word)):
-    #        if word[x] in 'aeiou':
-    #            replace[(word[0 : x : ] + letter + word[x + 1 : :])] = x
+    for letter in 'abcdefghijklmnopqrstuvwxyz':
+        for x in range(len(word)):
+            if word[x] in 'abcdefghijklmnopqrstuvwxyz':
+                replace[(word[0 : x : ] + letter + word[x + 1 : :])] = x
     variations = {
         'double': double,
         'omit': omit,
@@ -42,7 +42,7 @@ f = open('variations.txt', 'w')
 variants = {}
 
 for word in words:
-   if words[word]<400:
+   if words[word]<200:
       break
    wordVariations = getVariations(word)
    for variationType in wordVariations:
