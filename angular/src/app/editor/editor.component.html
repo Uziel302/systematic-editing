@@ -9,6 +9,7 @@
     <option value="en.wikipedia">English Wikipedia</option>
     <option value="ru.wikipedia">Russian Wikipedia</option>
   </select>
+  <br><br>
 
   <div *ngIf="!typosService.suspectWord.suspect" class="edit-error">
     {{ typosService.errorMessage }}
