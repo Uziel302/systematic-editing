@@ -5,6 +5,7 @@ const oauthFetchJson = require("oauth-fetch-json");
 const FIXED_STATUS = 1;
 const NOT_FOUND_STATUS = 4;
 const SERVED_STATUS = 5;
+const delimiter = '[\\s\\-{}\\[,.\\";\\^~#\\=&\\)\\|<>\\?]';
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
@@ -203,7 +204,7 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 
   //no context yet
   if(fromDB){
-    oldcontext = new RegExp("\\b"+typo.suspect+"\\b");
+    oldcontext = new RegExp(delimiter+typo.suspect+delimiter);
     newcontext = typo.correction;
   }
   if (newcontext === oldcontext) {
@@ -217,10 +218,10 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 };
 
 exports.addContext = (typo, text) => {
-  let regex = new RegExp(" .{1,120}\\b(?=" + typo.suspect + "\\b)", "s");
+  let regex = new RegExp(" .{1,120}"+delimiter+"(?=" + typo.suspect +delimiter+")", "s");
   typo.contextBefore = text.match(regex) ? text.match(regex)[0] : "";
 
-  regex = new RegExp("(?<=\\b" + typo.suspect + ")\\b.{1,300} ", "s");
+  regex = new RegExp("(?<="+delimiter + typo.suspect + ")"+delimiter+".{1,300} ", "s");
   typo.contextAfter = text.match(regex) ? text.match(regex)[0] : "";
 
   typo.origFullContext = typo.contextBefore + typo.suspect + typo.contextAfter;
