@@ -29,7 +29,7 @@ export class TyposService {
 
   changeProject(){
     this.suspectWord = this.emptySuspect;
-    this.suspectsInProcess = [];
+    this.suspects = [];
     this.getTypos();
   }
 
