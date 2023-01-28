@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { getTypos, replaceTypo, dismissTypo, checkSession, clearSession } = require("./controllers/typos.controller");
 
-router.get("/typos", (req, res) => {
+router.post("/typos", (req, res) => {
   return getTypos(req, res);
 });
 

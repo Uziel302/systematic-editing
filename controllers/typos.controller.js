@@ -8,7 +8,7 @@ const SERVED_STATUS = 5;
 
 exports.getTypos = async (req, res) => {
   knex(tableName)
-    .where("status", 0)
+    .where({status: 0, project: req.body.project})
     .limit(3)
     .then(async (data) => {
       let filterData = [];

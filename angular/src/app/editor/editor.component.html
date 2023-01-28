@@ -4,6 +4,11 @@
     A new version of a Wikipedia project by the same name, aimed to correct
     typos in Wikipedia.
   </h2>
+  Project: 
+  <select [(ngModel)]="typosService.project" (change)="typosService.changeProject()">
+    <option value="en.wikipedia">English Wikipedia</option>
+    <option value="ru.wikipedia">Russian Wikipedia</option>
+  </select>
 
   <div *ngIf="!typosService.suspectWord.suspect" class="edit-error">
     {{ typosService.errorMessage }}

@@ -23,11 +23,18 @@ export class TyposService {
   };
   public suspectWord: ITypo = this.emptySuspect;
   public errorMessage: string = '';
+  public project: string = 'en.wikipedia';
 
   constructor(private http: HttpClient) {}
 
+  changeProject(){
+    this.suspectWord = this.emptySuspect;
+    this.suspectsInProcess = [];
+    this.getTypos();
+  }
+
   getTypos(): void {
-    this.http.get<ITypo[]>(environment.apiEndPoint + 'api/typos').subscribe(
+    this.http.post<ITypo[]>(environment.apiEndPoint + 'api/typos', {project:this.project}).subscribe(
       (data) => {
         if (Object.keys(data).length === 0) {
           this.errorMessage =
