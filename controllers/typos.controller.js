@@ -61,7 +61,7 @@ exports.replaceTypo = async (req, res) => {
       req.body.suspect +
       "→" +
       req.body.correction +
-      " - [https://typos.toolforge.org/|Correct typos in one click]",
+      " - [[:en:Wikipedia:Correct typos in one click|Correct typos in one click]]",
     text: text.newArticleText,
     token,
     watchlist: "nochange",
