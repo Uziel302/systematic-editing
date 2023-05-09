@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 import json
 import re
+import time;
 
-with open('variations.txt') as f:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr-variations.txt') as f:
    suspects = {}
    for line in f:
       (key, val) = line.split()
       suspects[key] = val
 
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
+   existingWords = {}
+   for line in f:
+      (key, val) = line.split()
+      existingWords[key] = int(val)
+
 def decodeLine(line):
-    #line = line.decode()
     line = line.replace('&quot;','"')
     line = line.replace('&lt;','<')
     line = line.replace('&gt;','>')
@@ -17,6 +23,23 @@ def decodeLine(line):
     line = line.replace('&nbsp;',' ')
     line = line.replace('&mdash;','—')
     return line
+
+def countUnknownWords(words):
+    count = 0
+    nonExisting = ''
+    for index, currentword in enumerate(words):
+        hasCapital = False
+        hasNonLetter = False
+        #check if currentword contains capital letter
+        for letter in currentword:
+            if letter.isupper():
+                hasCapital = True
+            if not letter.isalpha():
+                hasNonLetter = True
+        if currentword and not hasCapital and not hasNonLetter and currentword not in existingWords:
+            nonExisting = nonExisting + ',' + currentword
+            count += 1
+    return count
 
 class isScanFlags:
     def __init__(self):
@@ -43,17 +66,17 @@ endpage = '</page>'
 #typos = []
 #checkedWords = {}
 title = ''
-f = open('demofile2.txt', 'w')
+f = open('data/results'+str(time.time())+'.txt', 'w')
 #from bz2 import BZ2File
 #with BZ2File('enwiki-20220501-pages-articles.xml.bz2','r') as file:
 #option to run on local env
-with open('ruwiki-20230120-pages-articles6.xml') as file:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-20230501-pages-articles.xml') as file:
     flags = isScanFlags()
     for line in file:
         line = decodeLine(line)
         if '<title>' in line:
             title = line
-            if 'украинцев' in line:
+            if 'Azarb' in line:
                 print(line)
             flags.newArticleReset()
         if '<text' in line:
@@ -148,6 +171,8 @@ with open('ruwiki-20230120-pages-articles6.xml') as file:
                 continue
             if word not in suspects:
                 continue
+            if countUnknownWords(objects) > 1:
+                continue
             #if the word without last s in words
             #if word[0:len(word)-1:] and word[len(word)-1]=='s' and word[len(word)-2]!='s':
             #    continue
@@ -169,8 +194,10 @@ with open('ruwiki-20230120-pages-articles6.xml') as file:
             #typos.append(word)
             before = ''
             after = ''
-            trimmedTitle = title.replace('    <title>','').replace('</title>\n','')
-            f.write(word+"INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('ru.wikipedia','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n")
+            trimmedTitle = title.replace('    <title>','').replace('</title>\n','').replace("'","\\'")
+            word = word.replace("'","\\'")
+            variant = variant.replace("'","\\'")            
+            f.write(word+" INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('es.wikivoyage','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n")
             #f.flush()
             break
 f.close()

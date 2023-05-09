@@ -1,6 +1,6 @@
 #list of words by frequency thanks to https://github.com/IlyaSemenov/wikipedia-word-frequency/
-#the file is too big for browsers, got the file by running wget https://raw.githubusercontent.com/IlyaSemenov/wikipedia-word-frequency/master/results/enwiki-2022-08-29.txt
-with open('enwiki-2022-08-29.txt') as f:
+#the file is too big for browsers, got the file by running wget https://raw.githubusercontent.com/IlyaSemenov/wikipedia-word-frequency/master/results/frwiki-2022-08-29.txt
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
    words = {}
    for line in f:
       (key, val) = line.split()

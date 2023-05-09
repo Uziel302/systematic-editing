@@ -40,3 +40,6 @@ credential.json
 # System files
 .DS_Store
 Thumbs.db
+
+#data files
+parsers/data
