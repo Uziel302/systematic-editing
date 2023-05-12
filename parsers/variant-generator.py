@@ -1,9 +1,9 @@
 #list of words by frequency thanks to https://github.com/IlyaSemenov/wikipedia-word-frequency/
 #the file is too big for browsers, got the file by running wget https://raw.githubusercontent.com/IlyaSemenov/wikipedia-word-frequency/master/results/frwiki-2022-08-29.txt
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
+with open('../parsers/data/frwiki-2022-08-29.txt', encoding="utf8") as f:
    words = {}
    for line in f:
-      (key, val) = line.split()
+      (key, val) = line.split(' ')
       words[key] = int(val)
 
 def getVariations(word):
@@ -38,7 +38,7 @@ def getVariations(word):
     }
     return variations
 
-f = open('variations.txt', 'w')
+f = open('fr-variations.txt', 'w')
 variants = {}
 
 for word in words:
