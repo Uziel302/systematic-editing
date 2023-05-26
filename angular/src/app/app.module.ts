@@ -10,6 +10,7 @@ import { EditorComponent } from './editor/editor.component';
 import { LoginSuccessComponent } from './login-success/login-success.component';
 import { AboutComponent } from './about/about.component';
 import { FormsModule } from '@angular/forms';
+import { StatsComponent } from './stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     EditorComponent,
     LoginSuccessComponent,
     AboutComponent,
+    StatsComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],

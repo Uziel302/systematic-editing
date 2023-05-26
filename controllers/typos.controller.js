@@ -35,6 +35,17 @@ exports.getTypos = async (req, res) => {
     });
 };
 
+exports.getStats = async (req, res) => {
+  knex(tableName)
+  .select('status', knex.raw('COUNT(*) as count'))
+  .where({project: req.body.project})
+  .groupBy('status')
+  .then((data) => {
+    res.status(200).json(data);
+  })
+  .catch((e) => {});
+}
+
 exports.replaceTypo = async (req, res) => {
   const session = this.getSession(req);
   if (!session.displayName) {

@@ -24,7 +24,13 @@ export class TyposService {
   public suspectWord: ITypo = this.emptySuspect;
   public errorMessage: string = '';
   public project: string = 'en.wikipedia';
-
+  count0: number = 0;
+  count1: number = 0;
+  count2: number = 0;
+  count3: number = 0;
+  count4: number = 0;
+  count5: number = 0;
+  
   constructor(private http: HttpClient) {}
 
   changeProject(){
@@ -34,7 +40,7 @@ export class TyposService {
   }
 
   getTypos(): void {
-    this.http.post<ITypo[]>(environment.apiEndPoint + 'api/typos', {project:this.project}).subscribe(
+    this.http.post<ITypo[]>(environment.apiEndPoint + 'api/getTypos', {project:this.project}).subscribe(
       (data) => {
         if (Object.keys(data).length === 0) {
           this.errorMessage =
@@ -44,6 +50,39 @@ export class TyposService {
           if (!this.suspectWord.suspect) {
             this.suspectWord = this.suspects.shift() ?? this.emptySuspect;
             this.generateContext();
+          }
+        }
+      },
+      (error) => {}
+    );
+  }
+
+  getStats(): void {
+    this.http.post<any[]>(environment.apiEndPoint + 'api/getStats', {project:this.project}).subscribe(
+      (data) => {
+        this.count0 = this.count1 = this.count2 = this.count3 = this.count4 = this.count5 = 0;
+        for(let datum of data){
+          switch(datum?.status){
+            case 0:
+              this.count0 = datum?.count;
+              break;
+            case 1:
+              this.count1 = datum?.count;
+              break;
+            case 2:
+              this.count2 = datum?.count;
+              break;
+            case 3:
+              this.count3 = datum?.count;
+              break;
+            case 4:
+              this.count4 = datum?.count;
+              break;
+            case 5:
+              this.count5 = datum?.count;
+              break;
+            default: 
+              break;
           }
         }
       },

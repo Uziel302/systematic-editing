@@ -2,10 +2,14 @@ const express = require("express");
 
 const router = express.Router();
 
-const { getTypos, replaceTypo, dismissTypo, checkSession, clearSession } = require("./controllers/typos.controller");
+const { getTypos, getStats, replaceTypo, dismissTypo, checkSession, clearSession } = require("./controllers/typos.controller");
 
-router.post("/typos", (req, res) => {
+router.post("/getTypos", (req, res) => {
   return getTypos(req, res);
+});
+
+router.post("/getStats", (req, res) => {
+  return getStats(req, res);
 });
 
 router.get("/checkSession", (req, res) => {
