@@ -64,14 +64,12 @@ f = open('data/results'+str(time.time())+'.txt', 'w')
 #from bz2 import BZ2File
 #with BZ2File('enwiki-20220501-pages-articles.xml.bz2','r') as file:
 #option to run on local env
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-20230501-pages-articles.xml') as file:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles22.xml-p44496246p44788941') as file:
     flags = isScanFlags()
     for line in file:
         line = decodeLine(line)
         if '<title>' in line:
             title = line
-            if 'Azarb' in line:
-                print(line)
             flags.newArticleReset()
         if '<text' in line:
             flags.textflag = 0
@@ -191,7 +189,7 @@ with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-202305
             trimmedTitle = title.replace('    <title>','').replace('</title>\n','').replace("'","\\'")
             word = word.replace("'","\\'")
             variant = variant.replace("'","\\'")            
-            f.write(word+" INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('es.wikivoyage','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n")
+            f.write(word+" INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('en.wikipedia','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n")
             #f.flush()
             break
 f.close()
