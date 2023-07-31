@@ -3,6 +3,8 @@ const tableName = "suspects";
 const rp = require("request-promise");
 const oauthFetchJson = require("oauth-fetch-json");
 const FIXED_STATUS = 1;
+const DISMISSED = 2;
+const SKIPPED = 3;
 const NOT_FOUND_STATUS = 4;
 const SERVED_STATUS = 5;
 const delimiter = '[\\s\\-{}\\[,.\\";\\^~#\\=&\\)\\|<>\\?]';
