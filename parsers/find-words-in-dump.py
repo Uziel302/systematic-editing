@@ -3,17 +3,11 @@ import json
 import re
 import time;
 
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr-variations.txt') as f:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/en-variations.txt') as f:
    suspects = {}
    for line in f:
       (key, val) = line.split()
       suspects[key] = val
-
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
-   existingWords = {}
-   for line in f:
-      (key, val) = line.split()
-      existingWords[key] = int(val)
 
 def decodeLine(line):
     line = line.replace('&quot;','"')
@@ -34,9 +28,9 @@ def countUnknownWords(words):
         for letter in currentword:
             if letter.isupper():
                 hasCapital = True
-            if not letter.isalpha():
+            if not letter.isalpha() and letter != "'":
                 hasNonLetter = True
-        if currentword and not hasCapital and not hasNonLetter and currentword not in existingWords:
+        if currentword and not hasCapital and not hasNonLetter:
             nonExisting = nonExisting + ',' + currentword
             count += 1
     return count
@@ -165,7 +159,7 @@ with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-202305
                 continue
             if not word.isalpha():
                 continue
-            if len(word) < 5:
+            if len(word) < 3:
                 continue
             if not word.islower():
                 continue
