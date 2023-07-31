@@ -75,13 +75,14 @@ endpage = '</page>'
 #checkedWords = {}
 title = ''
 history = [''] * 9
-f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/results.txt', 'w')
-#from bz2 import BZ2File
-#with BZ2File('enwiki-20220501-pages-articles.xml.bz2','r') as file:
+f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/'+str(time.time())+'results.txt', 'w')
+from bz2 import BZ2File
+with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850.bz2','rb') as file:
 #option to run on local env
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles22.xml-p44496246p44788941') as file:
+#with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850') as file:
     flags = isScanFlags()
     for line in file:
+        line = line.decode()
         line = decodeLine(line)
         for index, historyline in enumerate(history[::]):
             if not index:
