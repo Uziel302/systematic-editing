@@ -9,6 +9,12 @@ with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/en-variations
       (key, val) = line.split()
       suspects[key] = val
 
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-2022-08-29.txt') as f:
+   existingWords = {}
+   for line in f:
+      (key, val) = line.split()
+      existingWords[key] = int(val)
+
 def decodeLine(line):
     line = line.replace('&quot;','"')
     line = line.replace('&lt;','<')
@@ -18,21 +24,29 @@ def decodeLine(line):
     line = line.replace('&mdash;','—')
     return line
 
-def countUnknownWords(words):
+def countUnknownWords(history):
+    historyStr = ' '.join(history)
+    words = re.split(r"([\-{}\[,.\";\^~#\=&\)\|<>\?]*\s+[\-{},.\";\^~#\=&\)\|>\?]*)", historyStr)
     count = 0
     nonExisting = ''
     for index, currentword in enumerate(words):
-        hasCapital = False
+        currentword = currentword.strip("'")
         hasNonLetter = False
+        hasCapital = False
+        hasNonAscii = False
         #check if currentword contains capital letter
         for letter in currentword:
             if letter.isupper():
                 hasCapital = True
             if not letter.isalpha() and letter != "'":
                 hasNonLetter = True
-        if currentword and not hasCapital and not hasNonLetter:
+            if not letter.isascii():
+                hasNonAscii = True
+        if currentword and (hasNonAscii or (not hasNonLetter and not hasCapital and currentword not in existingWords)):
             nonExisting = nonExisting + ',' + currentword
             count += 1
+    if count > 1:
+        print(nonExisting)
     return count
 
 class isScanFlags:
@@ -60,7 +74,8 @@ endpage = '</page>'
 #typos = []
 #checkedWords = {}
 title = ''
-f = open('data/results'+str(time.time())+'.txt', 'w')
+history = [''] * 9
+f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/results.txt', 'w')
 #from bz2 import BZ2File
 #with BZ2File('enwiki-20220501-pages-articles.xml.bz2','r') as file:
 #option to run on local env
@@ -68,6 +83,12 @@ with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-202307
     flags = isScanFlags()
     for line in file:
         line = decodeLine(line)
+        for index, historyline in enumerate(history[::]):
+            if not index:
+                history[0] = line
+                history[index + 1] = historyline
+            elif index != len(history) - 1:
+                history[index + 1] = historyline
         if '<title>' in line:
             title = line
             flags.newArticleReset()
@@ -163,7 +184,7 @@ with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-202307
                 continue
             if word not in suspects:
                 continue
-            if countUnknownWords(objects) > 1:
+            if countUnknownWords(history) > 1:
                 continue
             #if the word without last s in words
             #if word[0:len(word)-1:] and word[len(word)-1]=='s' and word[len(word)-2]!='s':

@@ -17,7 +17,7 @@
 }
 
 .action-button {
-  margin: 10px 0;
+  margin: 10px 0 0 0;
   font-size: 25px;
   font-family: "Open Sans";
 }
@@ -93,4 +93,8 @@ textarea {
 
   #text-part {
   }
+}
+
+.dismiss-type {
+  font-size: 12px;
 }

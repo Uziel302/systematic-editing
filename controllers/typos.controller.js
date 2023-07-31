@@ -7,6 +7,9 @@ const DISMISSED = 2;
 const SKIPPED = 3;
 const NOT_FOUND_STATUS = 4;
 const SERVED_STATUS = 5;
+const DISMISSED_FOREIGN = 6;
+const DISMISSED_NAME = 7;
+const DISMISSED_ONLY_HERE = 8;
 const delimiter = '[\\s\\-{}\\[,.\\";\\^~#\\=&\\)\\|<>\\?]';
 
 exports.getTypos = async (req, res) => {

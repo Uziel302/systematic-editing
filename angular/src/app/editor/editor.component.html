@@ -4,8 +4,11 @@
     A new version of a Wikipedia project by the same name, aimed to correct
     typos in Wikipedia.
   </h2>
-  Project: 
-  <select [(ngModel)]="typosService.project" (change)="typosService.changeProject()">
+  Project:
+  <select
+    [(ngModel)]="typosService.project"
+    (change)="typosService.changeProject()"
+  >
     <option value="en.wikipedia">English Wikipedia</option>
     <option value="fr.wikipedia">French Wikipedia</option>
     <option value="es.wikipedia">Spanish Wikipedia</option>
@@ -17,7 +20,7 @@
     <option value="de.wikivoyage">German Wikivoyage</option>
     <option value="ru.wikivoyage">Russian Wikivoyage</option>
   </select>
-  <br><br>
+  <br /><br />
 
   <div *ngIf="!typosService.suspectWord.suspect" class="edit-error">
     {{ typosService.errorMessage }}
@@ -27,7 +30,10 @@
     <div id="text-part">
       <div class="replacement">
         {{ typosService.suspectWord.suspect }} →
-        <input [(ngModel)]="typosService.suspectWord.correction" (input)="typosService.generateContext()"/>
+        <input
+          [(ngModel)]="typosService.suspectWord.correction"
+          (input)="typosService.generateContext()"
+        />
         <button id="type-button" (click)="prompt()">Type</button>
       </div>
       <div class="title">
@@ -42,17 +48,45 @@
 
     <div id="buttons-part">
       <div class="action-buttons narrow-none">
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(6)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">as foreign word</div>
+        </div>
+
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(7)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">as name</div>
+        </div>
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(8)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">only here</div>
+        </div>
+
         <button
           class="action-button"
           [disabled]="!loginService.username"
-          (click)="dismiss()"
-        >
-          Dismiss
-        </button>
-        <button
-          class="action-button"
-          [disabled]="!loginService.username"
-          (click)="skip()"
+          (click)="dismiss(3)"
         >
           Skip
         </button>
@@ -70,11 +104,8 @@
         >
           Add typo template
         </button>
-        <button
-          class="action-button"
-          (click)="toggleContext()"
-        >
-        {{contextCopy}}
+        <button class="action-button" (click)="toggleContext()">
+          {{ contextCopy }}
         </button>
       </div>
 
@@ -82,7 +113,7 @@
         <button
           class="action-button"
           [disabled]="!loginService.username"
-          (click)="skip()"
+          (click)="dismiss(3)"
         >
           Skip
         </button>
@@ -93,11 +124,8 @@
         >
           Add typo template
         </button>
-        <button
-          class="action-button"
-          (click)="toggleContext()"
-        >
-        {{contextCopy}}
+        <button class="action-button" (click)="toggleContext()">
+          {{ contextCopy }}
         </button>
       </div>
       <div class="action-buttons wide-none">
@@ -108,13 +136,42 @@
         >
           Replace
         </button>
-        <button
-          class="action-button"
-          [disabled]="!loginService.username"
-          (click)="dismiss()"
-        >
-          Dismiss
-        </button>
+      </div>
+      <div class="action-buttons wide-none">
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(6)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">as foreign word</div>
+        </div>
+
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(7)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">as name</div>
+        </div>
+        <div>
+          <button
+            class="action-button"
+            [disabled]="!loginService.username"
+            (click)="dismiss(8)"
+          >
+            Dismiss
+          </button>
+          <br />
+          <div class="dismiss-type">only here</div>
+        </div>
       </div>
       <div class="edit-error">{{ typosService.errorMessage }}</div>
       <div *ngIf="!this.editContext">
@@ -134,9 +191,7 @@
       </div>
       <div *ngIf="this.editContext">
         editable context:
-        <textarea [(ngModel)]="typosService.suspectWord.fullContext"
-          ></textarea
-        >
+        <textarea [(ngModel)]="typosService.suspectWord.fullContext"></textarea>
       </div>
     </div>
   </div>

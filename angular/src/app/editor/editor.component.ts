@@ -34,12 +34,8 @@ export class EditorComponent implements OnInit {
     this.typosService.replaceTypo();
   }
 
-  dismiss() {
-    this.typosService.dismissTypo(2);
-  }
-
-  skip() {
-    this.typosService.dismissTypo(3);
+  dismiss(type: number) {
+    this.typosService.dismissTypo(type);
   }
 
   template() {
