@@ -45,8 +45,8 @@ def countUnknownWords(history):
         if currentword and (hasNonAscii or (not hasNonLetter and not hasCapital and currentword not in existingWords)):
             nonExisting = nonExisting + ',' + currentword
             count += 1
-    if count > 1:
-        print(nonExisting)
+    # if count > 1:
+    #     print(nonExisting)
     return count
 
 class isScanFlags:
@@ -77,7 +77,7 @@ title = ''
 history = [''] * 9
 f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850.bz2','rb') as file:
+with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles.xml.bz2','rb') as file:
 #option to run on local env
 #with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850') as file:
     flags = isScanFlags()
