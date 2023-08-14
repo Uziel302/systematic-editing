@@ -217,7 +217,7 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 
   let oldcontext = typo.origFullContext;
   let newcontext = typo.fullContext;
-  let escapedSuspect = escapeRegex(typo.suspect);
+  let escapedSuspect = this.escapeRegex(typo.suspect);
 
   //no context yet
   if(fromDB){
@@ -235,7 +235,7 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 };
 
 exports.addContext = (typo, text) => {
-  let escapedSuspect = escapeRegex(typo.suspect);
+  let escapedSuspect = this.escapeRegex(typo.suspect);
   let regex = new RegExp(" .{1,120}"+delimiter+"(?=" + escapedSuspect +delimiter+")", "s");
   typo.contextBefore = text.match(regex) ? text.match(regex)[0] : "";
 
