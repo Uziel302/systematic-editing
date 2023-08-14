@@ -164,7 +164,7 @@ exports.getArticleText = async (typo) => {
 };
 
 exports.escapeRegex = (str) => {
-  return str.replace(/([\\{}()|.?*+\-^$\[\]])/g, "\\$1");
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
 exports.getCSRF = async (req, session) => {
@@ -217,10 +217,11 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 
   let oldcontext = typo.origFullContext;
   let newcontext = typo.fullContext;
+  let escapedSuspect = escapeRegex(typo.suspect);
 
   //no context yet
   if(fromDB){
-    oldcontext = new RegExp(delimiter+typo.suspect+delimiter);
+    oldcontext = new RegExp(delimiter+escapedSuspect+delimiter);
     newcontext = typo.correction;
   }
   if (newcontext === oldcontext) {
@@ -234,12 +235,13 @@ exports.getOrigModifiedArticle = async (typo, fromDB) => {
 };
 
 exports.addContext = (typo, text) => {
-  let regex = new RegExp(" .{1,120}"+delimiter+"(?=" + typo.suspect +delimiter+")", "s");
+  let escapedSuspect = escapeRegex(typo.suspect);
+  let regex = new RegExp(" .{1,120}"+delimiter+"(?=" + escapedSuspect +delimiter+")", "s");
   typo.contextBefore = text.match(regex) ? text.match(regex)[0] : "";
 
-  regex = new RegExp("(?<="+delimiter + typo.suspect + ")"+delimiter+".{1,300} ", "s");
+  regex = new RegExp("(?<="+delimiter + escapedSuspect + ")"+delimiter+".{1,300} ", "s");
   typo.contextAfter = text.match(regex) ? text.match(regex)[0] : "";
 
-  typo.origFullContext = typo.contextBefore + typo.suspect + typo.contextAfter;
+  typo.origFullContext = typo.contextBefore + escapedSuspect + typo.contextAfter;
   return typo;
 };
