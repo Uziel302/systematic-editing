@@ -3,13 +3,13 @@ import json
 import re
 import time;
 
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr-variations.txt') as f:
+with open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/fr-variations.txt') as f:
    suspects = {}
    for line in f:
       (key, val) = line.split()
       suspects[key] = val
 
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
+with open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
    existingWords = {}
    for line in f:
       (key, val) = line.split()
@@ -77,9 +77,9 @@ endpage = '</page>'
 #checkedWords = {}
 title = ''
 history = [''] * 9
-f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr'+str(time.time())+'results.txt', 'w')
+f = open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/fr'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-20231120-pages-articles.xml.bz2','rb') as file:
+with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/frwiki-20231120-pages-articles.xml.bz2','rb') as file:
     flags = isScanFlags()
     for line in file:
         flags.newLineReset()
