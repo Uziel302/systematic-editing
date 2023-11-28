@@ -3,13 +3,13 @@ import json
 import re
 import time;
 
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/en-variations.txt') as f:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr-variations.txt') as f:
    suspects = {}
    for line in f:
       (key, val) = line.split()
       suspects[key] = val
 
-with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-2022-08-29.txt') as f:
+with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
    existingWords = {}
    for line in f:
       (key, val) = line.split()
@@ -45,8 +45,8 @@ def countUnknownWords(history):
         if currentword and (hasNonAscii or (not hasNonLetter and not hasCapital and currentword not in existingWords)):
             nonExisting = nonExisting + ',' + currentword
             count += 1
-    # if count > 1:
-    #     print(nonExisting)
+    if count > 1:
+        print(nonExisting)
     return count
 
 class isScanFlags:
@@ -68,6 +68,8 @@ class isScanFlags:
         self.galleryflag = 0
         self.Galleryflag = 0
         self.sourceflag = 0
+    def newLineReset(self):
+        self.fileflag = 0
     
 mainstr = '<ns>0</ns>'
 endpage = '</page>'
@@ -75,13 +77,12 @@ endpage = '</page>'
 #checkedWords = {}
 title = ''
 history = [''] * 9
-f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/'+str(time.time())+'results.txt', 'w')
+f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/fr'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles.xml.bz2','rb') as file:
-#option to run on local env
-#with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850') as file:
+with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/frwiki-20231120-pages-articles.xml.bz2','rb') as file:
     flags = isScanFlags()
     for line in file:
+        flags.newLineReset()
         line = line.decode()
         line = decodeLine(line)
         for index, historyline in enumerate(history[::]):
@@ -117,13 +118,7 @@ with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-202
                 flags.templateflag -= 1
             if '{{' in word:
                 flags.templateflag += 1
-            if '[File' in word:
-                flags.fileflag = 1
-            if '[file' in word:
-                flags.fileflag = 1
-            if '[Image' in word:
-                flags.fileflag = 1
-            if '[image' in word:
+            if '[[' in word and ':' in word:
                 flags.fileflag = 1
             if ']' in word:
                 flags.externalflag = 0
