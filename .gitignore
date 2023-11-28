@@ -43,3 +43,4 @@ Thumbs.db
 
 #data files
 parsers/data
+credential.json
