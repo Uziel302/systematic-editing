@@ -33,20 +33,20 @@ def countUnknownWords(history):
         currentword = currentword.strip("'")
         hasNonLetter = False
         hasCapital = False
-        hasNonAscii = False
+        # hasNonAscii = False
         #check if currentword contains capital letter
         for letter in currentword:
             if letter.isupper():
                 hasCapital = True
             if not letter.isalpha() and letter != "'":
                 hasNonLetter = True
-            if not letter.isascii():
-                hasNonAscii = True
-        if currentword and (hasNonAscii or (not hasNonLetter and not hasCapital and currentword not in existingWords)):
+            # if not letter.isascii():
+            #     hasNonAscii = True
+        if currentword and (not hasNonLetter and not hasCapital and currentword not in existingWords):
             nonExisting = nonExisting + ',' + currentword
             count += 1
-    if count > 1:
-        print(nonExisting)
+    #if count > 1:
+    #    print(nonExisting)
     return count
 
 class isScanFlags:
