@@ -11,3 +11,5 @@ Over 110,000 edited have been done in English Wikipedia through the project.
 The new interface lives in:
 https://typos.toolforge.org/
 
+Steps to do after scan: 
+# make sure no "out.println" in output sql, it breaks query and stops the process at that point.
