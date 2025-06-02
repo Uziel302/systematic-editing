@@ -1,6 +1,6 @@
 #list of words by frequency thanks to https://github.com/IlyaSemenov/wikipedia-word-frequency/
 #the file is too big for browsers, got the file by running wget https://raw.githubusercontent.com/IlyaSemenov/wikipedia-word-frequency/master/results/frwiki-2022-08-29.txt
-with open('../parsers/data/frwiki-2022-08-29.txt') as f:
+with open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/enwiki-2023-04-13.txt') as f:
    words = {}
    for line in f:
       (key, val) = line.split(' ')
@@ -27,9 +27,9 @@ def getVariations(word):
     #replacing by another letter
     #en 'abcdefghijklmnopqrstuvwxyz'
     #fr 'abcdefghijklmnopqrstuvwxyzéàèùçëïüâêîôû'
-    for letter in 'abcdefghijklmnopqrstuvwxyzéàèùçëïüâêîôû':
+    for letter in 'abcdefghijklmnopqrstuvwxyz':
         for x in range(len(word)):
-            if word[x] in 'abcdefghijklmnopqrstuvwxyzéàèùçëïüâêîôû':
+            if word[x] in 'abcdefghijklmnopqrstuvwxyz':
                 replace[(word[0 : x : ] + letter + word[x + 1 : :])] = x
     variations = {
         'double': double,
@@ -40,11 +40,11 @@ def getVariations(word):
     }
     return variations
 
-f = open('data/fr-variations.txt', 'w')
+f = open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/en-variations.txt', 'w')
 variants = {}
 
 for word in words:
-   if words[word]<250:
+   if words[word]<50:#if word has value less than 50 appearances on wikipedia, don't variate it
       break
    wordVariations = getVariations(word)
    for variationType in wordVariations:
