@@ -3,13 +3,13 @@ import json
 import re
 import time;
 
-# with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/en-variations.txt') as f:
+# with open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/en-variations.txt') as f:
 #    suspects = {}
 #    for line in f:
 #       (key, val) = line.split()
 #       suspects[key] = val
 
-# with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-2022-08-29.txt') as f:
+# with open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/enwiki-2022-08-29.txt') as f:
 #    existingWords = {}
 #    for line in f:
 #       (key, val) = line.split()
@@ -113,12 +113,12 @@ endpage = '</page>'
 #checkedWords = {}
 title = ''
 history = [''] * 9
-f = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/'+str(time.time())+'results.txt', 'w')
-fspaces = open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/space'+str(time.time())+'results.txt', 'w')
+f = open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/'+str(time.time())+'results.txt', 'w')
+fspaces = open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/space'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/mbpmbp/Documents/systematic-editing/parsers/data/hewiki-20230801-pages-articles.xml.bz2','rb') as file:
+with BZ2File('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/hewiki-20230801-pages-articles.xml.bz2','rb') as file:
 #option to run on local env
-#with open('/Users/mbpmbp/Documents/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850') as file:
+#with open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/enwiki-20230720-pages-articles18.xml-p26716198p27121850') as file:
     flags = isScanFlags()
     for line in file:
         line = line.decode()
