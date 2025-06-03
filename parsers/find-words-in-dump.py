@@ -3,13 +3,13 @@ import json
 import re
 import time;
 
-with open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/en-variations.txt') as f:
+with open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/en-variations.txt') as f:
    suspects = {}
    for line in f:
       (key, val) = line.split()
       suspects[key] = val
 
-with open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/frwiki-2022-08-29.txt') as f:
+with open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/enwiki-2023-04-13.txt') as f:
    existingWords = {}
    for line in f:
       (key, val) = line.split()
@@ -77,9 +77,9 @@ endpage = '</page>'
 #checkedWords = {}
 title = ''
 history = [''] * 9
-f = open('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/fr'+str(time.time())+'results.txt', 'w')
+f = open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/en'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/frwiki-20240101-pages-articles.xml.bz2','rb') as file:
+with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/enwiki-20250501-pages-articles-multistream.xml.bz2','rb') as file:
     flags = isScanFlags()
     for line in file:
         flags.newLineReset()
@@ -180,8 +180,8 @@ with BZ2File('/Users/mbpmbp/Documents/GitHub/systematic-editing/parsers/data/frw
                 continue
             if word not in suspects:
                 continue
-            if countUnknownWords(history) > 1:
-                continue
+            # if countUnknownWords(history) > 3:
+            #     continue
             #if the word without last s in words
             #if word[0:len(word)-1:] and word[len(word)-1]=='s' and word[len(word)-2]!='s':
             #    continue
