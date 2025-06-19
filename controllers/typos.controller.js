@@ -77,7 +77,7 @@ exports.replaceTypo = async (req, res) => {
       req.body.suspect +
       "→" +
       req.body.correction +
-      " - typos.toolforge.org",
+      " - [[toolforge:typos]]",
     text: text.newArticleText,
     token,
     watchlist: "nochange",
