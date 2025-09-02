@@ -44,7 +44,7 @@ export class TyposService {
       (data) => {
         if (Object.keys(data).length === 0) {
           this.errorMessage =
-            'All the typos were handled! We try to generate new batch once a month';
+            'All the typos were handled!';
         } else {
           this.suspects.push(...data);
           if (!this.suspectWord.suspect) {
