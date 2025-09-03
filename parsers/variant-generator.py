@@ -44,7 +44,7 @@ f = open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/en-v
 variants = {}
 
 for word in words:
-   if words[word]<150:#if word has value less appearances on wikipedia, don't variate it
+   if words[word]<50:#if word has value less appearances on wikipedia, don't variate it
       continue
    if not word.isalpha():
        continue

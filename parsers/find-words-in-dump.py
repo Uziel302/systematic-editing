@@ -79,7 +79,7 @@ title = ''
 history = [''] * 9
 f = open('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/en'+str(time.time())+'results.txt', 'w')
 from bz2 import BZ2File
-with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/enwiki-20250501-pages-articles-multistream.xml.bz2','rb') as file:
+with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/enwiki-20250820-pages-articles.xml.bz2','rb') as file:
     flags = isScanFlags()
     for line in file:
         flags.newLineReset()
@@ -114,6 +114,7 @@ with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/
         for index, word in enumerate(objects):
             if word == ' ':
                 continue
+            original_word = word
             if '}}' in word and flags.templateflag > 0:
                 flags.templateflag -= 1
             if '{{' in word:
@@ -172,12 +173,14 @@ with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/
                 flags.quote3flag = 0
             if flags.templateflag or flags.sourceflag or flags.Galleryflag or flags.galleryflag or flags.poemflag or flags.codeflag or flags.divflag or flags.quoteflag or flags.quote2flag or flags.quote3flag or flags.commentflag or flags.externalflag or flags.fileflag or flags.refflag:
                 continue
+            if not word.isascii():
+                continue
             if not word.isalpha():
                 continue
             if len(word) < 3:
                 continue
-            if not word.islower():
-                continue
+            if word.istitle():
+                word = word.lower()
             if word not in suspects:
                 continue
             # if countUnknownWords(history) > 3:
@@ -204,9 +207,13 @@ with BZ2File('/Users/asafmalin/Documents/GitHub/systematic-editing/parsers/data/
             before = ''
             after = ''
             trimmedTitle = title.replace('    <title>','').replace('</title>\n','').replace("'","\\'")
-            word = word.replace("'","\\'")
-            variant = variant.replace("'","\\'")            
-            f.write(word+" INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('en.wikipedia','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n")
+            word = original_word.replace("'","\\'")
+            variant = variant.replace("'","\\'")   
+            if word.istitle():
+              variant = variant.capitalize()
+            sql = word+" INSERT INTO `suspects` (`project`,`title`,`suspect`,`correction`,`type`,`location`,`status`,`fixer`) VALUES ('en.wikipedia','"+trimmedTitle+"','"+word+"','"+variant+"','"+variationType+"','"+str(spot)+"',0,'');\n"       
+            f.write(sql)
+            # print(sql)
             #f.flush()
             break
 f.close()
