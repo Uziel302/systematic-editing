@@ -53,7 +53,9 @@ export class TyposService {
           }
         }
       },
-      (error) => {}
+      (error) => {
+        alert(error.error);
+      }
     );
   }
 
@@ -86,7 +88,9 @@ export class TyposService {
           }
         }
       },
-      (error) => {}
+      (error) => {
+        alert(error.error);
+      }
     );
   }
 
@@ -135,6 +139,7 @@ export class TyposService {
           }
         },
         (error) => {
+          alert(error.error);
           for (let suspect of this.suspectsInProcess) {
             if (suspect.id === id) {
               suspect.response = error.error;
